@@ -1,0 +1,54 @@
+<div class="header ">
+   <img src="assets/flipkart1.png" class="img">
+    <div class="search-container">
+        <form>
+          <input type="text" placeholder="Search for products,brands and more" id="search">
+          <button type="submit" class="fafa"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+
+    
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" id="btn">Login</button>
+  <div class="modal " id="myModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" style="text-align: center;">Login</h4>
+        </div>
+        <div class="modal-body" >
+          <form>
+           <label>Name:</label><input type="text" #myname ><br><br>
+            <label>Password:</label><input type="text" #mypass><br><br><br>
+            <input type="button" value="LOGIN" (click)="login(myname.value,mypass.value)"><br><br>
+           <a routerLink="registration">Register Now!</a>
+            
+        </form>
+        </div>
+        <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+          
+    </div>
+  </div>
+      
+<div class="dropdown">
+    <button class="dropbtn">More<span class="glyphicon glyphicon-menu-down"></span></button>
+    <div class="dropdown-content">
+      <a routerLink="notifications" (click)="notifications()"><span class="glyphicon glyphicon-bell"></span> Notifications</a>
+      <a routeLink="sellon" (click)="sellon()"><span class="glyphicon glyphicon-briefcase"></span> Sell on flipkart</a>
+      <a routerLink="customer" (click)="customer()"><span class="glyphicon glyphicon-question-sign"></span> 24/7 Customer care</a>
+      <a href="https://advertising.flipkart.com/login?returl=/?otracker=ch_vn_advertise_header"><span class="glyphicon glyphicon-phone"></span> Advertise</a>
+      <a href="https://www.flipkart.com/mobile-apps?otracker=ch_vn_mobile_apps"> <span class="glyphicon glyphicon-download"></span> Download app</a>
+    </div>
+</div>
+<div class="cart">
+    <span class="glyphicon glyphicon-shopping-cart"></span>
+    <a href="https://www.flipkart.com/viewcart?otracker=Cart_Icon_Click" style="color:white;text-decoration: none;">Cart</a>
+  </div>
+</div>
+
+
+
+

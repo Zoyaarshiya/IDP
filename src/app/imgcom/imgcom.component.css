@@ -1,0 +1,22 @@
+#nav
+{
+    background-color: white;
+    height:130px;
+    
+}
+.container-fluid 
+{
+    margin-left: 140px;
+}
+.container-fluid ul li a
+{
+    margin-left: 40px;
+}
+.container-fluid ul li a:hover
+{
+    color:royalblue;
+}
+.mob
+{
+    margin-left:14px;
+}

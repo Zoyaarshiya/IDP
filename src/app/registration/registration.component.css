@@ -1,0 +1,13 @@
+h1
+{
+    text-align: center;
+}
+label
+{
+    display: inline-block;
+    width:12%;
+}
+.container
+{
+   margin-left: 600px;
+}
