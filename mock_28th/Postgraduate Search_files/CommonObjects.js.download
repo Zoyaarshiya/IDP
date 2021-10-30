@@ -1,0 +1,42 @@
+/*!
+ * CommonObjects  v1.0 - 03/09/2012
+ */
+// Script: commonobjects.js: Containts the common object that shared across most of the JS files
+// Project Home - http://www.postgraduatesearch.com/
+// 
+// About: commonobjects.js
+// This Js file contains some common object variables which is called from different areas of javascript files
+var CommonObjects = { 
+	 pgs_context_path :'/pgs',
+ 	 pgs_anon_session :'16180339',
+     split_char       :'##SPLIT##',
+	 pgs_default_stdy :'study',
+	 pgs_default_qual :'postgraduate',
+	 pgs_default_bcat :'courses',	
+	 pgs_default_loc  :'uk',	 
+	 pgs_default_online :'online',
+     pgsjws_flag		: 'Y'	 
+ }
+var ErrorMessage = { 
+   error_empty_firstname        : "Please enter your first name",
+   error_empty_lastname         : "Please enter your last name",
+   error_empty_surname          : "Please add your sur name",
+   error_empty_email            : "Please enter your email address",
+   error_empty_passw			: "Please enter your password",
+   error_confirm_passw			: "Password confirmation doesn’t match password supplied",
+   error_confirm_email			: "Email confirmation doesn’t match email address supplied",
+   error_empty_address			: "Please enter valid address",
+   error_invalid_email          : "Please enter a valid email",
+   error_empty_town             : "Please enter your Town/City",
+   error_policy                 : "Please accept our terms and conditions",
+   error_empty_postcode         : "Please enter your Postcode",
+   error_invalid_postcode       : "Please enter a valid Postcode",
+   error_empty_college          : "Please select the university",
+   error_empty_course           : "Please select the course",
+   error_empty_year             : "Please chose your course year",
+   error_empty_nationality      : "Please select your nationality",
+   error_empty_dob			    : "Please select your dob",
+   error_empty_postenquiry      :  "Please select the universities you would like to email",
+   error_empty_subject			: "Please enter your subject of interest",
+   error_empty_yoe              : "Please enter Year of intended start"
+}

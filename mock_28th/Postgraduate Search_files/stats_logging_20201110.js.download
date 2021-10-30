@@ -1,0 +1,1875 @@
+var setErrborder = "err1";
+function GAInteractionEventTracking(buttonType, interactonCat, interactionType, collegeName, cpeValue){  
+var booleanValue = false;
+var nonInteraction = 0;
+var optionVal = 1;
+if(buttonType == 'emailrequest' || buttonType == 'prosbutton' || buttonType == 'view comparison' || buttonType == 'topsearch' || buttonType == 'emailsubmit' || buttonType =='Profile section' || interactonCat =='Funding Landing Page' ){
+	booleanValue = true;
+	nonInteraction = 1;
+}
+if( interactonCat == 'GDPR'){
+	booleanValue = true;
+	nonInteraction = true;
+}
+ if (buttonType =='browse page refine' || buttonType == 'view comparison'|| buttonType == 'register'){
+	   optionVal = null;
+	}
+	var eventCategory = interactonCat;
+	var eventAction = interactionType;
+	var eventLabel = collegeName;
+	//collegeName.toLowerCase();
+if(cpeValue != undefined && cpeValue !=""){
+	optionVal = parseInt(cpeValue);
+}
+if(cpeValue == "0"){
+   optionVal = parseInt(cpeValue);
+   }
+	var eventVal = optionVal; 
+	//live account UA-9147147-3
+	//test account UA-36929657-1
+ga('send', 'event', 
+   eventCategory, eventAction, eventLabel, eventVal,
+   {'nonInteraction': nonInteraction});
+//  alert("eventCAT=>"+eventCategory+"<=EV action =>"+eventAction+"<=EV coll name =>" +eventLabel+"<=EV cpe =>"+ eventVal+"<=EV boolean =>"+booleanValue);
+  }
+  
+// geo location of user//
+
+ /**********Email Enquiry *******/
+  function reqInfoClick(obj) { 
+  //console.log("reqInfoClick"); 
+   var screenWidth = jqueryWidth();  
+   var errorfound = "FALSE";
+   var p_msg  = $$D("p_msg");
+   var GAemail_flag  = trimString($$D("GAemail_flag_hidden").value);
+   var sch_id  = trimString($$D("p_sch_id_hidden").value);
+   var ga_collegeName = $$D("ga_college_name").value; 
+   var ga_cpeValue = $$D("ga_cpe_value").value;
+   var crsStartyear = getradioValue('p_crsstarttyear');
+   var pname = $$D("p_name"); //pname.className="adiptxt";
+   var psurname = $$D("p_surname"); //psurname.className="adiptxt";   
+   var pemail = $$D("p_email"); //pemail.className="adiptxt";   
+   var dobDate  = $$D("p_date"); //dobDate.className="adiptxt";		
+   var dobMonth = $$D("p_month"); //dobMonth.className="adiptxt";
+   var dobYear  = $$D("p_year"); //dobYear.className="adiptxt";
+   var postcode = $$D("p_enqpc1"); //postcode.className="adiptxt";  
+   var pc; var cpc;
+   var perror_id ="";
+   var validemail="N";
+   var ipFlag = $$D("ipflag");
+   var pregisterChecked="true";
+   var msg = $$D("p_msg").value;
+   var flag = containsSpecialCharacter(msg);
+   var marketing_flag = $$D("market").value;
+   var souls_flag = $$D("solus").value;
+   var survey_flag = $$D("survey").value;
+   var receive_no_flag = 'N';
+   if($$D("pass")!=null)
+   var ppassword  = $$D("pass").value;
+   var wigth = screen.width;
+   setCookie('PGS_YOE',crsStartyear, '', '/', '', '');
+  
+   //getLocation();
+   //alert ( "latitude "  + l_latitude);
+   //alert ( "longitude "  + l_longitude);
+   
+   if(trimString(flag)!=""){p_msg.className = "adiptxt err_wrg"; errorfound = "TRUE";if(perror_id==""){ perror_id = p_msg.id; }	   
+	   $$D("p_msg_errmsg").innerHTML="There are some illegal characters in the text you supplied. Tut tut!";blockNone("p_msg_errmsg","block");
+    //return false;     
+    }else{p_msg.className = "adiptxt"; blockNone("p_msg_errmsg","none");}
+   if(isEmpty(pname.value)){ pname.className = "adiptxt err_wrg"; errorfound = "TRUE";blockNone("p_name_errmsg","block"); 
+							 if(perror_id==""){ perror_id = pname.id; }}
+   else{pname.className = "adiptxt err_rte"; blockNone("p_name_sucmsg","block");}
+   if(isEmpty(psurname.value)){ psurname.className = "adiptxt err_wrg"; errorfound = "TRUE";if(perror_id==""){ perror_id = psurname.id; }
+	blockNone("p_surname_errmsg","block");}
+   else{ psurname.className = "adiptxt err_rte"; blockNone("p_surname_errmsg","none");} //blockNone("p_surname_sucmsg","block"); }
+   if(isEmpty(pemail.value)){ pemail.className = "adiptxt err_wrg"; errorfound = "TRUE";
+		$$D("p_email_errmsg").innerHTML="We need this so we can send you..well emails obviously.";blockNone("p_email_errmsg","block");
+		if(perror_id==""){ perror_id = pemail.id; } }
+   else{ if(!isValidEmail(trimString(pemail.value))){pemail.className = "adiptxt err_wrg";errorfound = "TRUE";
+	    $$D("p_email_errmsg").innerHTML="Something seems to be missing from your email. Awkward.";
+		blockNone("p_email_errmsg",'block');if(perror_id==""){ perror_id = pemail.id; } }
+		else{ validemail="Y";} }
+    
+  if($$D("pass")!=null) {
+    if (isEmpty($$D("pass").value)) {
+        $$D("pass").className = "adiptxt err_wrg";
+        $$D("pass_errmsg").innerHTML = "This is awkward, what's your password?";
+        blockNone("pass_errmsg","block");
+        errorfound = "TRUE"
+        if (perror_id == "") {
+            perror_id = ppassword.id;
+        }
+    }
+    if (!isEmpty(trimString($$D("pass").value)) && ($$D("pass").value).length < 6) {
+         $$D("pass").className = "adiptxt err_wrg";
+        $$D("pass_errmsg").innerHTML = "Your password should be 6 characters or more.";
+        blockNone("pass_errmsg","block");
+        errorfound = "TRUE";
+        if (perror_id == "") {
+            perror_id = ppassword.id;
+        }
+    }
+	else {
+        ppassword.className = "adiptxt err_rte";
+        blockNone("pass_sucmsg", "block");
+    }
+  }	
+
+	
+  /*if (isEmpty(ppassword.value)) {
+        ppassword.className = "adiptxt err_wrg";
+        $$D("p_password_errmsg").innerHTML="We need your password.";
+        blockNone("p_email_errmsg","block");
+        errorfound = "TRUE"
+        if (perror_id == "") {
+            perror_id = ppassword.id;
+        }
+    }
+    if (!isEmpty(trimString(ppassword.value)) && (ppassword.value).length < 6) {
+         ppassword.className = "adiptxt err_wrg";
+        $$D("p_password_errmsg").innerHTML = "Your password should be 6 characters or more.";
+        blockNone("p_email_errmsg","block");
+        errorfound = "TRUE"
+        if (perror_id == "") {
+            perror_id = ppassword.id;
+        }
+    }
+		else if($$D("userexists").value=="") {  			   
+			   if($$D("alEmailExists").value=="Y"){errorfound = "TRUE"; if(perror_id==""){perror_id = pemail.id;} }
+			   else{pemail.className = "adiptxt err_rte"; blockNone("p_email_errmsg",'none'); blockNone("p_email_sucmsg",'block');} } 
+		else{pemail.className = "adiptxt err_rte"; blockNone("p_email_errmsg",'none'); blockNone("p_email_sucmsg",'block');}*/
+		            
+   /*if(isEmpty(postcode.value)){ postcode.className = "adiptxt err_wrg"; errorfound = "TRUE";$$D("p_enqpc_errmsg").innerHTML="Please enter the postcode";
+   blockNone("p_enqpc_errmsg","block");blockNone("p_enqpc_sucmsg","none"); if(perror_id==""){ perror_id = postcode.id; } }
+   else{ */
+   /*if(ipFlag.value=='Y') { cpc = isValidUKpostcode(postcode.value); 
+				if(cpc){ postcode.className = "adiptxt err_rte"; } else{ errorfound = "TRUE"; postcode.className = "adiptxt err_wrg"; 
+				$$D("p_enqpc_errmsg").innerHTML="Please enter valid postcode";blockNone("p_enqpc_errmsg","block");blockNone("p_enqpc_sucmsg","none");
+				if(perror_id==""){ perror_id = postcode.id; } } }*/
+   /*if(dobDate.value == "" || dobMonth.value == "" || dobYear.value == "" ){		
+	errorfound = "TRUE";
+	dobDate.className="adiptxt err_wrg";			
+	dobMonth.className="adiptxt err_wrg";							
+	dobYear.className="adiptxt err_wrg";
+	$$D("p_dob_errmsg").innerHTML="Happy birthday to you on the.....?";
+	if(perror_id==""){ perror_id =dobDate.id;}
+	blockNone("p_dob_errmsg",'block'); blockNone("p_dob_sucmsg",'none');}
+	else{ dateValid=setBorderTxtBx(dobDate);	
+	  if(dateValid != 'valid'){ errorfound = "TRUE"; dobDate.className="adiptxt err_wrg"; 			
+	    dobMonth.className="adiptxt err_wrg"; dobYear.className="adiptxt err_wrg"; blockNone("p_dob_errmsg",'block'); blockNone("p_dob_sucmsg",'none');
+		if(perror_id==""){ perror_id =dobDate.id; }}	
+	  else{ dobDate.className="adiptxt err_rte";dobMonth.className="adiptxt err_rte";dobYear.className="adiptxt err_rte";
+		    blockNone("p_dob_errmsg",'none'); blockNone("p_dob_sucmsg",'block');} }*/
+	setTimeout(function(){ if($$D("userexists").value=="" && validemail == "Y") {  			   
+			   if($$D("alEmailExists").value=="Y"){errorfound = "TRUE"; if(perror_id==""){perror_id = pemail.id;} }
+			   else{pemail.className = "adiptxt err_rte"; blockNone("p_email_errmsg",'none'); blockNone("p_email_sucmsg",'block');} } 
+    if (marketing_flag == 'true'){
+         marketing_flag = 'Y';
+    }
+     if (souls_flag == 'true') {
+         souls_flag = 'Y';
+    }
+     if (survey_flag == 'true') {
+         survey_flag = 'Y';
+    }
+
+    if ($$D("p_policy_enquiry")) {
+        ppolicy = $$D("p_policy_enquiry");
+        blockNone("p_policy_enquiry_err", "none");
+        ppolicyChecked = ppolicy.checked;
+        if (ppolicy.checked == false) {
+            blockNone("p_policy_enquiry_err", "block");
+            errorfound = "TRUE";
+            if (perror_id == "") {
+                perror_id = "p_policy_enquiry";
+            }
+        }
+    }
+ if(errorfound == "FALSE"){	
+    hideSubmitButton('req');
+	if($$D("pass")!=null)
+    var em_password = trimString($$D("pass").value);
+	var strSend="";
+     strSend = "p_bcat="+$$D("p_bcat").value+"&p_bloc="+$$D("p_bloc").value
+				  +"&p_qual="+$$D("p_qual").value+"&p_stdy="+$$D("p_stdy").value+"&x="+$$D("x").value 
+                  +"&a="+$$D("a").value+"&z="+$$D("z").value+"&w="+$$D("w").value+"&p="+$$D("p").value+"&i="+$$D("i").value 
+				  +"&p_user_id="+$$D("p_user_id").value+"&p_order_item_id="+$$D("p_order_item_id").value
+				  +"&p_postcode="+trimString($$D("p_enqpc").value) +"&p_marketing_flag=" + marketing_flag +
+			      "&p_souls_flag=" + souls_flag +"&p_survey_flag=" + survey_flag +"&p_receive_flag=" + receive_no_flag;
+     strSend = strSend + "&p_msg="+escape($$D("p_msg").value)+"&p_register=" + pregisterChecked+"&p_crsstarttyear="+crsStartyear+"&p_sch_id="+sch_id+"&p_screen_width="+wigth+"&p_source_order_item_id="+$$D("p_source_order_item_id").value;  
+	 if (GAemail_flag == 'N'){GAInteractionEventTracking('email','interaction','Email-lightbox',ga_collegeName,ga_cpeValue);
+	// if($$D("p_spons_page_name") && $$D("p_spons_page_name").value == "search_results"){
+ sponsoredGaLogging($$D("w").value,$$D("z").value); /*GA Logging*/
+} //}		    	 
+	 var url = "/pgs/pgs_interactive.do_enquire_new?" + strSend
+	  if ( (screenWidth < 993) ) {
+        url = url + "&p_name="+trimString($$D("p_name").value) + "&p_surname="+trimString($$D("p_surname").value)
+                  +"&p_email="+trimString($$D("p_email").value)+"&p_password="+encodeURIComponent(em_password);  
+       createform(url);
+       return;       
+    }
+	else{
+		sm('newvenueform', '650', '350', 'email-submit');
+		if ($$D("newlbx").style.display="block"){blockNone('newlbx','none');$$D("newlbx").innerHTML="";}
+        $$D("ajax-div").style.display = "block";
+        $$D("lightbx").style.display = "block";	 
+	    var ajax = new sack();
+		ajax.setVar("p_name", trimString(pname.value));
+		ajax.setVar("p_surname", trimString(psurname.value));
+		ajax.setVar("p_email", trimString(pemail.value));
+		ajax.setVar("p_password", encodeURIComponent(em_password));
+		ajax.requestFile = url; // Specifying which file to get
+        ajax.onCompletion = function(){displayFormData(ajax, 'email-submit');}; // Specify function that will be executed after file has been found
+        ajax.runAJAX();
+      }
+     //showPGSLightBox('email-submit','650','350', strSend);
+	 }else { $$D(perror_id).focus();} },2000);
+	 
+    return false;
+ } 
+ 
+ /*End email*/
+  /**********Download prospectus Enquiry *******/
+  function dpprospectusClick(obj) { 
+  // console.log("dpprospectusClick");
+  // console.log("dpprospectusClick");
+   var errorfound = "FALSE";
+   var GAdown_flag  = trimString($$D("GAdownl_flag_hidden").value);
+   var ga_collegeName = $$D("dga_college_name").value;
+   var ga_cpeValue = $$D("dga_cpe_value").value;
+   var crsStartyear = getradioValue('dp_crsstarttyear');
+   var pname= $$D("dp_name"); var pname_hidden = $$D("dp_name_hidden");blockNone("dpname_errdiv","none");pname.className="";
+   var psurname= $$D("dp_surname"); var psurname_hidden = $$D("dp_surname_hidden");blockNone("dpsurname_errdiv","none");psurname.className="";
+   var pemail= $$D("dp_email"); var pemail_hidden = $$D("dp_email_hidden");blockNone("dpemail_errdiv","none");pemail.className=""; 
+   var paddr1 = $$D("p_addr_1_dp"); var paddr1_hidden = $$D("p_addr1_hidden_dp");blockNone("paddr1_errdiv_dp","none");paddr1.className="";
+   var paddr2 = $$D("p_addr_2_dp"); var paddr2_hidden = $$D("p_addr2_hidden_dp");blockNone("paddr2_errdiv_dp","none");paddr2.className="";
+   var ptown = $$D("p_town_dp"); var ptown_hidden = $$D("p_town_hidden_dp");blockNone("ptown_errdiv_dp","none");ptown.className="";      
+   var dobDate  = $$D("p_date_dp");blockNone("pdob_errdiv","none");		//PGS_20150811
+   var dMonth   = $$D("p_month_dp");   
+   var dobMonth = $$D("p_month_dp").value;
+   var dobYear  = $$D("p_year_dp");
+   var pc;blockNone("penqpc_errdiv_dp","none");
+   var countryId=$$D("p_enqcountry_dp").value;blockNone("pcountry_errdivdp","none");
+   var addr1 = $$D('p_addr_1_dp').value;
+   var addr2 = $$D('p_addr_2_dp').value;
+   var town  = $$D('p_town_dp').value;
+   var monthStr = dMonth.options[dMonth.selectedIndex].innerHTML;
+   setCookie('PGS_YOE',crsStartyear, '', '/', '', '');
+   $$D("reg_dd_dp").className="reg_dd date";			
+   $$D("reg_mm_dp").className="reg_dd month";														
+   $$D("reg_yy_dp").className="reg_dd year";	
+
+	if(dobDate.value == "" || dobMonth == "" || dobYear.value == ""){		
+		errorfound = "TRUE";$$D("pdob_errmsg_dp").innerHTML="Please select your DOB";blockNone("pdob_errdiv_dp","block");	
+		$$D("reg_dd_dp").className="reg_dd date errmsg";			
+		$$D("reg_mm_dp").className="reg_dd month errmsg";							
+	    $$D("reg_yy_dp").className="reg_dd year errmsg";	
+	}
+	else{
+		dateValid = isValidDOBDate(dobDate.value,dobMonth,dobYear.value,monthStr);		
+		if(dateValid != 'valid')
+		{
+			errorfound = "TRUE";$$D("pdob_errmsg_dp").innerHTML=dateValid;blockNone("pdob_errdiv_dp","block");
+			$$D("reg_dd_dp").className="reg_dd date errmsg";			
+			$$D("reg_mm_dp").className="reg_dd month errmsg";							
+			$$D("reg_yy_dp").className="reg_dd year errmsg";				
+		}
+		else{ blockNone("pdob_errdiv_dp","none");}
+		
+	}   
+	if((trimString(countryId) == "") || (trimString(countryId) == null)){		
+		errorfound = "TRUE";
+		blockNone("pcountry_errdivdp","block");		
+	}   
+	//if($$D("p_enqpc_dp").style.display == "block"){	    
+		if ($$D("p_enqpc_dp").value == "Postcode*"){
+			//alert($$D("p_enqpc").value);
+			errorfound = "TRUE";
+			$$D("penqpc_errmsg_dp").innerHTML="Please enter your postcode";						
+			blockNone("penqpc_errdiv_dp","block");
+		}	
+		else{
+			if( countryId == "55" || countryId == "139" || countryId == "256" || countryId == "257" ){
+				pc = $$D("p_enqpc_dp").value;
+				cpc = isValidUKpostcode(pc);
+				//alert(cpc);
+				if(cpc){
+					blockNone("penqpc_errdiv_dp","none");				
+				}else {
+					errorfound = "TRUE";
+					$$D("penqpc_errmsg_dp").innerHTML="Please enter valid postcode";						
+					blockNone("penqpc_errdiv_dp","block");
+				}
+			}
+		}
+	//}	
+   if(isEmpty(pname.value) || pname.value == pname_hidden.value){pname.className = setErrborder;   
+    errorfound = "TRUE";$$D("dpname_errmsg").innerHTML=ErrorMessage.error_empty_firstname;blockNone("dpname_errdiv","block");}
+   if(isEmpty(psurname.value) || psurname.value == psurname_hidden.value){psurname.className = setErrborder;   
+    errorfound = "TRUE";$$D("dpsurname_errmsg").innerHTML=ErrorMessage.error_empty_lastname;blockNone("dpsurname_errdiv","block");}
+   if(isEmpty(pemail.value) || pemail.value == pemail_hidden.value){pemail.className = setErrborder;   
+    errorfound = "TRUE";$$D("dpemail_errmsg").innerHTML=ErrorMessage.error_empty_email;blockNone("dpemail_errdiv","block");}
+	else{
+   if(!isValidEmail(trimString(pemail.value))){pemail.className = setErrborder;errorfound = "TRUE";$$D("dpemail_errmsg").innerHTML=ErrorMessage.error_invalid_email;blockNone("dpemail_errdiv","block");}}   
+   if(isEmpty(paddr1.value) || paddr1.value == paddr1_hidden.value){paddr1.className = setErrborder;   
+   errorfound = "TRUE";$$D("paddr1_errmsg_dp").innerHTML=ErrorMessage.error_empty_address;blockNone("paddr1_errdiv_dp","block");} 
+   //if(isEmpty(paddr2.value) || paddr2.value == paddr2_hidden.value){paddr2.className = setErrborder;   
+   //errorfound = "TRUE";$$D("paddr2_errmsg_dp").innerHTML=ErrorMessage.error_empty_address;blockNone("paddr2_errdiv_dp","block");} 
+   if(isEmpty(ptown.value) || ptown.value == ptown_hidden.value){ptown.className = setErrborder;      	
+    errorfound = "TRUE";$$D("ptown_errmsg_dp").innerHTML=ErrorMessage.error_empty_town;blockNone("ptown_errdiv_dp","block");}     
+   var ppolicy =""; var pregister="";
+   var ppolicyChecked=""; var pregisterChecked="";
+   if($$D("dp_policy_enquiry")){
+      ppolicy = $$D("dp_policy_enquiry");blockNone("dppolicy_errdiv","none");ppolicy.className="";
+	  ppolicyChecked =ppolicy.checked;
+      if (ppolicy.checked==false){ppolicy.className = setErrborder;errorfound = "TRUE";
+	     $$D("dppolicy_errmsg").innerHTML=ErrorMessage.error_policy;blockNone("dppolicy_errdiv","block");}
+      }
+   if($$D("dp_register")){
+      pregister = $$D("dp_register");
+	  pregisterChecked=pregister.checked;
+   }
+   if(errorfound == "FALSE"){	
+   hideSubmitButton('down');
+   var strSend = "p_name="+trimString($$D("dp_name").value )
+                   +"&p_surname="+trimString($$D("dp_surname").value)
+                   +"&p_email="+trimString($$D("dp_email").value)
+				   +"&p_day="+$$D("p_date_dp").value
+				   +"&p_month="+$$D("p_month_dp").value
+				   +"&p_year="+$$D("p_year_dp").value
+				   +"&p_country_id="+$$D("p_enqcountry_dp").value
+                    +"&p_bcat="+$$D("dp_bcat").value 
+                    +"&p_bloc="+$$D("dp_bloc").value 
+                    +"&p_qual="+$$D("dp_qual").value 
+                    +"&p_stdy="+$$D("dp_stdy").value 
+                    +"&x="+$$D("x").value 
+                    +"&a="+$$D("a").value 
+                    +"&z="+$$D("z").value 
+                    +"&w="+$$D("w").value 
+					+"&p_user_id="+$$D("p_user_id").value
+                    +"&p_order_item_id="+$$D("dp_order_item_id").value
+					+"&p_addr1="+encodeURIComponent(trimString($$D("p_addr_1_dp").value))
+					//+"&p_addr2="+$$D("p_addr_2_dp").value
+					+"&p_town="+encodeURIComponent(trimString($$D("p_town_dp").value))
+					+"&p_postcode="+trimString($$D("p_enqpc_dp").value);
+	 if(!(isEmpty(paddr2.value)) && paddr2.value != paddr2_hidden.value){
+				strSend = strSend +"&p_addr2="+encodeURIComponent(trimString($$D("p_addr_2_dp").value));
+	    }					
+     strSend = strSend +"&p_register=" + pregisterChecked + "&p_policy="+ppolicyChecked +"&p_crsstarttyear="+crsStartyear;     
+	 /*if ($$D("p_enqpc_dp").style.display == "block"){
+		strSend = strSend+"&p_postcode="+$$D("p_enqpc_dp").value;
+	 }*/	 
+	//alert(strSend);
+     //GAInteractionEventTracking('email','interaction','Email',ga_collegeName,ga_cpeValue);/*GA Logging*/
+   if (GAdown_flag == 'N')
+   {
+	 GAInteractionEventTracking('prosbutton','interaction','Prospectus-dl',ga_collegeName,ga_cpeValue);/*GA Logging*/
+   }
+//     showPGSLightBox('dpprospectus-submit','650','250', strSend);
+   var screenWidth = jqueryWidth();
+  if (screenWidth < 993){
+  //window.location.href = CommonObjects.pgs_context_path+"/pgs_interactive.do_download_prospectus?"+strSend+'&'+pparam;
+  var url_decode = CommonObjects.pgs_context_path+"/pgs_interactive.do_download_prospectus?"+strSend;
+  createform(url_decode);
+  return false;
+  }else{
+     var ajaxURL = CommonObjects.pgs_context_path+"/pgs_interactive.do_download_prospectus?"+strSend;
+     var ajax=new sack();
+     ajax.requestFile = ajaxURL;
+     ajax.onCompletion = function(){downloadResponse(ajax);};	
+     ajax.runAJAX();    
+     return false;
+	 }}
+    return false;                                                                 
+ }  
+ function downloadResponse(ajax){
+   var response = ajax.response.split(CommonObjects.split_char);   
+   var dpUrl="";
+   var dpUrl1="";
+   var dpUrl2="";
+   var dpUrl3="";
+   sm('newvenueform','650','250','po-submit');
+   $$D("ajax-div").style.display="block";
+   $$D("lightbx").style.display="block";   
+   if(response[0] !=null && response[0]  == 'SUCCESS'){ 
+        if (response[1] !=null){	
+		    dpUrl =response[1];		    
+			window.open(dpUrl,'_blank');
+			$$D("lightbx").innerHTML=response[2]; 
+	        $$D("ajax-div").style.display="none";  
+	        $$D("lightbx").style.display="block";
+	        $$D("newvenueform").style.display="block"; 
+ var elements =  $("script[id^='iterate']");
+  if(elements.length>0)
+  {
+   for (var i=1; i<=elements.length; i++) {
+    //alert($$D('iterate'+i).innerHTML);
+    eval($$D('iterate'+i).innerHTML);
+   }
+   }
+   }
+   }
+   else if (response[0] !=null && ( response[0]  == '\nSUCCESS' || response[0]  == 'SUCCESS' || response[0].indexOf("SUCCESS") > 0 ))
+   {
+		if (response[1] !=null && response[1] !='REQ_PROSPECTOS')
+		{	
+			dpUrl =response[1];		    
+			window.open(dpUrl,'_blank');
+		}
+		if (response[2] !=null && response[2] !='REQ_PROSPECTOS')
+		{	
+			dpUrl1 =response[2];		    
+			window.open(dpUrl1,'_blank');
+		}
+		if (response[3] !=null && response[3] !='REQ_PROSPECTOS')
+		{	
+			dpUrl2 =response[3];		    
+			window.open(dpUrl2,'_blank');
+		}
+		if (response[4] !=null && response[4] !='REQ_PROSPECTOS')
+		{	
+			dpUrl3 =response[4];		    
+			window.open(dpUrl3,'_blank');
+		}	 
+		 $$D("lightbx").innerHTML=response[5]; 
+	     $$D("ajax-div").style.display="none";  
+	     $$D("lightbx").style.display="block";
+	     $$D("newvenueform").style.display="block"; 
+		 var elements =  $("script[id^='iterate']");
+         if(elements.length>0)
+         {
+         for (var i=1; i<=elements.length; i++) {
+         //alert($$D('iterate'+i).innerHTML);
+         eval($$D('iterate'+i).innerHTML);
+         }
+         }	
+   }
+   else{
+       $$D("lightbx").innerHTML=response; 
+	   $$D("ajax-div").style.display="none";  
+	   $$D("lightbx").style.display="block";
+	   $$D("newvenueform").style.display="block";
+       var elements =  $("script[id^='iterate']");
+         if(elements.length>0)
+         {
+         for (var i=1; i<=elements.length; i++) {
+         //alert($$D('iterate'+i).innerHTML);
+         eval($$D('iterate'+i).innerHTML);
+         }
+         }		   
+   }
+ }
+ /*End Download prospectu*/
+  /**********Email Enquiry *******/
+  function reqProspectusClick(obj) { 
+   //console.log("reqProspectusClick");
+   var errorfound = "FALSE";
+   var GArequest_flag  = trimString($$D("GArequest_flag_hidden").value);
+   var ga_collegeName = $$D("ga_college_name").value;
+   var ga_cpeValue = $$D("ga_cpe_value").value;  
+   var crsStartyear = getradioValue('p_crsstarttyear');
+   var pname = $$D("p_name"); var pname_hidden = $$D("p_name_hidden");blockNone("pname_errdiv","none");pname.className="";
+   var psurname = $$D("p_surname"); var psurname_hidden = $$D("p_surname_hidden");blockNone("psurname_errdiv","none");psurname.className="";
+   var pemail = $$D("p_email"); var pemail_hidden = $$D("p_email_hidden");blockNone("pemail_errdiv","none");pemail.className="";
+   var paddr1 = $$D("p_addr_1"); var paddr1_hidden = $$D("p_addr1_hidden");blockNone("paddr1_errdiv","none");paddr1.className="";
+   var paddr2 = $$D("p_addr_2"); var paddr2_hidden = $$D("p_addr2_hidden");blockNone("paddr2_errdiv","none");paddr2.className="";
+   var ptown = $$D("p_town"); var ptown_hidden = $$D("p_town_hidden");blockNone("ptown_errdiv","none");ptown.className="";
+   var penqpc = $$D("p_enqpc"); var penqpc_hidden = $$D("p_enqpc_hidden");blockNone("penqpc_errdiv","none");penqpc.className="";
+  // var pnonuk = $$D("p_nonuk");
+   var penqcountry = $$D("p_enqcountry_rq");
+   var countryId = $$D("p_enqcountry_rq").value;
+   var penqcountry_hidden = $$D("p_enqcountry_hidden");blockNone("pcountry_errdiv","none");	
+   var dobDate  = $$D("p_date");blockNone("pdob_errdiv","none");		//PGS_20150811
+   var dMonth   = $$D("p_month");   
+   var dobMonth = $$D("p_month").value;
+   var dobYear  = $$D("p_year");
+   var marketing_flag = $$D("market").value;
+   var souls_flag = $$D("solus").value;
+   var survey_flag = $$D("survey").value;
+   var receive_no_flag = 'N';
+   var pc;
+   var cpc;
+   var monthStr = dMonth.options[dMonth.selectedIndex].innerHTML;
+   setCookie('PGS_YOE',crsStartyear, '', '/', '', '');
+   $$D("reg_dd").className="reg_dd date";			
+   $$D("reg_mm").className="reg_dd month";							
+   $$D("reg_mm").className="reg_dd month";							
+   $$D("reg_yy").className="reg_dd year";	
+	if(dobDate.value == "" || dobMonth == "" || dobYear.value == ""){		
+		errorfound = "TRUE";$$D("pdob_errmsg").innerHTML="Please select your DOB";blockNone("pdob_errdiv","block");	
+		$$D("reg_dd").className="reg_dd date errmsg";			
+		$$D("reg_mm").className="reg_dd month errmsg";							
+	    $$D("reg_yy").className="reg_dd year errmsg";	
+	}
+	else{
+		dateValid = isValidDOBDate(dobDate.value,dobMonth,dobYear.value,monthStr);		
+		if(dateValid != 'valid')
+		{
+			errorfound = "TRUE";$$D("pdob_errmsg").innerHTML=dateValid;blockNone("pdob_errdiv","block");
+			$$D("reg_dd").className="reg_dd date errmsg";			
+			$$D("reg_mm").className="reg_dd month errmsg";							
+			$$D("reg_yy").className="reg_dd year errmsg";				
+		}		
+	}     
+	if((trimString(penqcountry.value) == "") || (trimString(penqcountry.value) == null)){		
+		errorfound = "TRUE";
+		blockNone("pcountry_errdiv","block");		
+	}	
+	if ($$D("p_enqpc").value == "Postcode*"){
+		//alert($$D("p_enqpc").value);
+		errorfound = "TRUE";			
+		$$D("penqpc_errmsg").innerHTML="Please enter your postcode";		
+		blockNone("penqpc_errdiv","block");
+	}	
+	else{
+		if( countryId == "55" || countryId == "139" || countryId == "256" || countryId == "257" ){
+			pc = $$D("p_enqpc").value;				
+			cpc = isValidUKpostcode(pc);
+			//alert(cpc);
+			if(cpc){
+				blockNone("penqpc_errdiv","none");				
+			}else {
+				errorfound = "TRUE";
+				$$D("penqpc_errmsg").innerHTML="Please enter valid postcode";		
+				blockNone("penqpc_errdiv","block");
+			}
+		}
+	}	
+   if(isEmpty(pname.value) || pname.value == pname_hidden.value){pname.className = setErrborder;   
+    errorfound = "TRUE";$$D("pname_errmsg").innerHTML=ErrorMessage.error_empty_firstname;blockNone("pname_errdiv","block");}
+   if(isEmpty(psurname.value) || psurname.value == psurname_hidden.value){psurname.className = setErrborder;   
+    errorfound = "TRUE";$$D("psurname_errmsg").innerHTML=ErrorMessage.error_empty_lastname;blockNone("psurname_errdiv","block");}
+   if(isEmpty(pemail.value) || pemail.value == pemail_hidden.value){pemail.className = setErrborder;   
+    errorfound = "TRUE";$$D("pemail_errmsg").innerHTML=ErrorMessage.error_empty_email;blockNone("pemail_errdiv","block");}	
+	else{
+   if(!isValidEmail(trimString(pemail.value))){pemail.className = setErrborder;errorfound = "TRUE";$$D("pemail_errmsg").innerHTML=ErrorMessage.error_invalid_email;blockNone("pemail_errdiv","block");}}   
+   if(isEmpty(paddr1.value) || paddr1.value == paddr1_hidden.value){paddr1.className = setErrborder;   
+   errorfound = "TRUE";$$D("paddr1_errmsg").innerHTML=ErrorMessage.error_empty_address;blockNone("paddr1_errdiv","block");} 
+//   if(isEmpty(paddr2.value) || paddr2.value == paddr2_hidden.value){paddr2.className = setErrborder;   
+//   errorfound = "TRUE";$$D("paddr2_errmsg").innerHTML=ErrorMessage.error_empty_address;blockNone("paddr2_errdiv","block");} 
+   if(isEmpty(ptown.value) || ptown.value == ptown_hidden.value){ptown.className = setErrborder;      	
+    errorfound = "TRUE";$$D("ptown_errmsg").innerHTML=ErrorMessage.error_empty_town;blockNone("ptown_errdiv","block");}    
+/*	if(isEmpty(penqcountry.value) || penqcountry.value == penqcountry_hidden.value){
+	if(isEmpty(penqpc.value) || penqpc.value == penqpc_hidden.value){penqpc.className = setErrborder;   
+    errorfound = "TRUE"; $$D("penqpc_errmsg").innerHTML=ErrorMessage.error_empty_postcode;blockNone("penqpc_errdiv","block");}
+	else{
+		alert(countryId);
+		if( countryId == "55" || countryId == "139" || countryId == "256" || countryId == "257" ){
+		alert('vicky');
+			pc = trimString(penqpc.value); cpc = isValidUKpostcode(pc);				
+			if(cpc){ blockNone("penqpc_errdiv","none"); }
+			else {  errorfound = "TRUE"; $$D("penqpc_errmsg").innerHTML="Please enter valid postcode"; blockNone("penqpc_errdiv","block");  		 penqpc.className=setErrborder;
+				 }
+		}	
+	}
+	//else {if(!isValidUKpostcode(penqpc.value)){ penqpc.className = setErrborder;   
+    //errorfound = "TRUE"; $$D("penqpc_errmsg").innerHTML=ErrorMessage.error_invalid_postcode;blockNone("penqpc_errdiv","block");}
+	//}
+}*/
+   var ppolicy =""; var pregister="";
+   var ppolicyChecked=""; var pregisterChecked="";
+   if($$D("p_policy_enquiry")){
+      ppolicy = $$D("p_policy_enquiry");blockNone("ppolicy_errdiv","none");ppolicy.className="";
+	  ppolicyChecked =ppolicy.checked;
+      if (ppolicy.checked==false){ppolicy.className = setErrborder;errorfound = "TRUE";
+	     $$D("ppolicy_errmsg").innerHTML=ErrorMessage.error_policy;blockNone("ppolicy_errdiv","block");}
+      }
+   if($$D("p_register")){
+      pregister = $$D("p_register");
+	  pregisterChecked=pregister.checked;
+   }
+   if (marketing_flag == 'true'){
+         marketing_flag = 'Y';
+    }
+     if (souls_flag == 'true') {
+         souls_flag = 'Y';
+    }
+     if (survey_flag == 'true') {
+         survey_flag = 'Y';
+    }
+    
+   if(errorfound == "FALSE"){	
+    hideSubmitButton('ord');
+				   
+   var strSend = "p_name="+trimString($$D("p_name").value)
+                   +"&p_surname="+trimString($$D("p_surname").value)				   
+                   +"&p_email="+trimString($$D("p_email").value)
+				   +"&p_date="+$$D("p_date").value
+				   +"&p_month="+$$D("p_month").value
+				   +"&p_year="+$$D("p_year").value		
+				   +"&p_country_id="+$$D("p_enqcountry_rq").value
+		           +"&p_addr1="+encodeURIComponent(trimString($$D("p_addr_1").value))
+				   //+"&p_addr2="+trimString($$D("p_addr_2").value)
+				   +"&p_town="+encodeURIComponent(trimString($$D("p_town").value))
+                    +"&p_bcat="+$$D("p_bcat").value 
+                    +"&p_bloc="+$$D("p_bloc").value 
+                    +"&p_qual="+$$D("p_qual").value 
+                    +"&p_stdy="+$$D("p_stdy").value 
+                    +"&x="+$$D("x").value 
+                    +"&a="+$$D("a").value 
+                    +"&z="+$$D("z").value 
+                    +"&w="+$$D("w").value 
+					+"&p_user_id="+$$D("p_user_id").value
+                    +"&p_order_item_id="+$$D("p_order_item_id").value
+	                +"&p_enqpc="+trimString(chkdefaultValue(penqpc.value,'Postcode*'))
+				    +"&p_country="+encodeURIComponent(penqcountry.value) 
+					+"&p_marketing_flag=" + marketing_flag 
+					+"&p_souls_flag=" + souls_flag 
+					+"&p_survey_flag=" + survey_flag 
+					+"&p_receive_flag=" + receive_no_flag;
+
+		if(!(isEmpty(paddr2.value)) && paddr2.value != paddr2_hidden.value){
+			strSend = strSend +"&p_addr2="+encodeURIComponent(trimString($$D("p_addr_2").value));
+	    }
+     strSend = strSend +"&p_register=" + pregisterChecked + "&p_policy="+ppolicyChecked +"&p_crsstarttyear="+crsStartyear;	
+	 //alert(strSend);
+	 if (GArequest_flag == 'N')
+	 {
+	 GAInteractionEventTracking('prosbutton','interaction','Prospectus',ga_collegeName,ga_cpeValue);/*GA Logging*/
+	 }
+     showPGSLightBox('prospectus-submit','650','350', strSend);
+	 }
+    return false;
+ } 
+ 
+function prospectusQLClick(obj) {  
+   var errorfound = "FALSE";
+   var p_option_id=document.getElementsByName("p_option_id");
+   var p_attr_val_display_seq=document.getElementsByName("p_attr_val_display_seq");
+   var p_ord_item_type_attr_id=document.getElementsByName("p_ord_item_type_attr_id");
+   var p_attribute_value=document.getElementsByName("p_attribute_value");
+   var p_attribute_id=document.getElementsByName("p_attribute_id");
+   var p_default_value=document.getElementsByName("p_default_value");
+   var penq_id = $$D("p_enq_id");
+   var puser_id = $$D("p_user_id"); 
+   var pinteraction_flag = $$D("p_interaction_flag");
+    var sch_id  = trimString($$D("p_sch_id_hidden").value);
+   var pqual = $$D("p_qual");
+   //dob value calculation   
+    var dateDob = $$D('dateDOB').value;
+    var monthDob = $$D('monthDOB').value;
+    var yearDob = $$D('yearDOB').value;
+    var finalDob = dateDob+"/"+monthDob+"/"+yearDob;
+	//alert(finalDob);
+   $$D('dob_value').value = finalDob;
+  //  if(isEmpty(dateDob) || isEmpty(monthDob) || isEmpty(yearDob)){$$D("dob_value").className = setErrborder;   
+   // errorfound = "TRUE";$$D("date_of_birth_errmsg").innerHTML=ErrorMessage.error_empty_dob;blockNone("date_of_birth_errdiv","block");
+	//return false;}
+   if(errorfound == "FALSE")
+   { 
+   hideSubmitButton('qlbut');	
+   var strSend="";
+   for (var i=0;i<p_option_id.length;i++){
+	 strSend = strSend+"&p_option_id="+p_option_id[i].value;
+	 strSend = strSend+"&p_attr_val_display_seq="+p_attr_val_display_seq[i].value;
+	 strSend = strSend+"&p_ord_item_type_attr_id="+p_ord_item_type_attr_id[i].value;
+	 if(p_attribute_value[i].type == "checkbox"){
+	   if($$D('av'+p_attribute_id[i].value).checked){
+	    strSend = strSend+"&p_attribute_value=Y";
+	   }else{
+	    strSend = strSend+"&p_attribute_value=N"; 	   
+	   }
+	 }else {
+	 if (p_default_value[i].value == p_attribute_value[i].value)
+	 {
+	    p_attribute_value[i].value="";
+	 }	 
+     if (p_attribute_id[i].value=='185')
+	 {
+	 p_attribute_value[i].value = chkdefaultValue($$D("postcoder").value,'Please enter post code');
+	 }
+	 if (p_attribute_id[i].value=='189' || p_attribute_id[i].value=='190' ||p_attribute_id[i].value=='266'||p_attribute_id[i].value=='209')
+	 {
+     strSend = strSend+"&p_attribute_value="+encodeURIComponent(p_attribute_value[i].value); 
+	 }else{
+	 strSend = strSend+"&p_attribute_value="+p_attribute_value[i].value; 
+	 }
+	 }	 
+	 strSend = strSend+"&p_attribute_id="+p_attribute_id[i].value; 
+	 }
+	 strSend="p_enq_id="+penq_id.value+"&p_user_id="+puser_id.value+"&p_interaction_flag="+pinteraction_flag.value+"&p_qual="+pqual.value+"&p_sch_id="+sch_id+strSend; 
+	  showPGSLightBox('ql-submit','650','350', strSend);
+     return false;
+	 }
+	 return false;
+   } 
+   function setSelectedtoSpan(obj, spanid){
+   var selectionId = obj.id
+   var enqpc;
+   var el = document.getElementById(selectionId);
+   var text = el.options[el.selectedIndex].text;  
+//    if(selectionId == "p_address_id"){ document.getElementById(spanid).innerHTML = el.options[el.selectedIndex].value; }   
+   document.getElementById(spanid).innerHTML = text;
+   if(document.getElementById("ps_country_name")) {document.getElementById("ps_country_name").value = el.options[el.selectedIndex].value; }  
+   
+   if($$D('address_div') && obj.id=='p_country'){$$D('address_div').style.display= 'block';}
+   if(spanid == 'dds_190'|| spanid == 'nationality' || spanid=='p_enqcountry' || (obj.id=='p_country' && $('#valid_fieldset').is(":hidden")==false ) ){
+      var countryOfRes = obj.value;	  
+      if(countryOfRes != null && countryOfRes == 'England' ||countryOfRes == 'Northern Ireland' ||countryOfRes == 'Scotland' ||countryOfRes == 'Wales'
+	  ||countryOfRes =='55' || countryOfRes=='139'|| countryOfRes=='256'|| countryOfRes=='257'){	  
+	   if($$D('p_findadd'))
+        {$$D('p_findadd').style.display= 'block';}	   	   
+	   if($$D('addFinder'))
+        {$$D('addFinder').style.display= 'block';}
+		if(spanid == 'nationality' && $$D('postaddid'))
+		{$$D('postaddid').style.display= 'block';}
+	    /*if($$D('p_enqpc'))
+		{$$D('p_enqpc').style.display= 'block';}*/
+		if($$D('av185'))
+		{$$D('av185').style.display= 'block';}
+		if($$D('postcodef_div'))
+		{$$D('postcodef_div').style.display= 'block';}				
+      }else{
+	   if($$D('p_findadd'))
+        {$$D('p_findadd').style.display= 'none';}		  
+	   if($$D('addFinder') != null)
+        {$$D('addFinder').style.display= 'none';}
+		if($$D('postaddid')){ $$D('postaddid').style.display= 'none'; }
+	    /*if($$D('p_enqpc'))
+		{$$D('p_enqpc').style.display= 'none';}*/
+		if(spanid == 'nationality')
+		{$$D('postaddid').style.display= 'block';}
+		if($$D('av185') != null)
+		{$$D('av185').style.display= 'block';}	
+		if($$D('postcodef_div'))
+		{$$D('postcodef_div').style.display= 'none';}			
+      }     	  	  	  
+     }
+	else if(spanid == "p_enqcor"){
+	    //alert($$D('p_country').value);
+		countryOfRes = $$D('p_country').value;
+	    if(countryOfRes =='55' || countryOfRes=='139'|| countryOfRes=='256'|| countryOfRes=='257')
+		{//$$D('p_enqpc').style.display= 'block';
+		 //$$D('ppostcode_errdiv').style.display= 'none';
+		 $$D('addFinder').style.display= 'block';}
+	    else
+		{//$$D('p_enqpc').style.display= 'none';
+		 //$$D('ppostcode_errdiv').style.display= 'none';
+		 $$D('addFinder').style.display= 'none';}
+	 }
+	else if(spanid=='p_enqcor_rq' || spanid=='rpform' || spanid=='country_name'){ 
+      var countryOfRes = obj.value;
+	  if($$D('rp_address_field'))
+      {$$D('rp_address_field').style.display= 'block';} //PGS_20160621
+	  if(countryOfRes != null && countryOfRes == 'England' ||countryOfRes == 'Northern Ireland' ||countryOfRes == 'Scotland' ||countryOfRes == 'Wales' || countryOfRes =='55' || countryOfRes=='139'|| countryOfRes=='256'|| countryOfRes=='257'){
+			if($$D('addFinder') != null)
+			{$$D('addFinder').style.display= 'block';}
+			if(spanid == 'nationality')
+			{$$D('postaddid').style.display= 'block';}	
+		    blockNone("pcountry_errdiv","none");
+			if($$D('p_findaddress'))
+            {$$D('p_findaddress').style.display= 'block';} //PGS_20160621
+		}else {
+			if(spanid=='country_name'){
+				if($$D("p_enqpc")){ $$D("p_enqpc").className="adiptxt"; 
+					blockNone("p_enqpc_errmsg","none"); blockNone("p_enqpc_sucmsg","none");                                  				
+				}
+			}		
+			if($$D('addFinder') != null)
+			{$$D('addFinder').style.display= 'none';}
+			if(spanid == 'nationality')
+			{$$D('postaddid').style.display= 'none';}	
+			blockNone("pcountry_errdiv","none");
+			if($$D('p_findaddress'))
+            {$$D('p_findaddress').style.display= 'none';}   //PGS_20160621
+		}
+	}
+	else if(spanid=='p_enqcor_dp'){
+		countryOfRes = $$D('p_enqcountry_dp').value;
+	    if(countryOfRes =='55' || countryOfRes=='139'|| countryOfRes=='256'|| countryOfRes=='257')
+		{//$$D('p_enqpc_dp').style.display= 'block';
+		 $$D('addFinderdp').style.display= 'block';
+		 //$$D('penqpc_errdiv_dp').style.display= 'none';
+		}
+	    else
+		{//$$D('p_enqpc_dp').style.display= 'none';
+		 $$D('addFinderdp').style.display= 'none';
+		 //$$D('penqpc_errdiv_dp').style.display= 'none';
+		}	
+	}
+	else if(spanid=='p_enqcor_cd'){
+		countryOfRes = $$D('p_enqcountry_cd').value;
+		/*if(countryOfRes != null && countryOfRes != ''){
+			blockNone("pcountry_errdivcd","none");
+	    }*/
+	    if(countryOfRes =='55' || countryOfRes=='139'|| countryOfRes=='256'|| countryOfRes=='257')
+		{$$D('p_enqpc_cd_bt').style.display= 'block'; $$D('p_enqpc_cd').setAttribute("onKeypress","pcSrch(event)");}
+	    else
+		{$$D('p_enqpc_cd_bt').style.display= 'none'; $$D('p_enqpc_cd').removeAttribute("onKeypress");}	
+	}	
+}
+function firstUnivChk (){
+	//alert("coming here");
+	var pfirstunichk="";
+	if($$D('av265')!= null){
+	  pfirstunichk = $$D('av265'); 
+	  pCourseId    = $$D('p_attribute_value_hidden');
+	  if(pfirstunichk.checked){
+	   //alert("checked");
+		$$D('av264').value="";
+		$$D('pFirstUniv_hidden').value="";
+		if(pCourseId.value!=""){
+		  $$D('av209').value="";
+		  pCourseId.value="";
+		}		
+		$$D('av265').value="Y";
+		if($$D('av266').value==""){
+		  $$D('av266').value= "Please enter non UK university name";
+		}
+		$$D('av264').disabled=true;   
+		blockNone("av266","block");	
+		blockNone("lb266","block");			
+	  } else {
+		$$D('av266').value="";	   
+		$$D('av265').value="";
+		blockNone("av266","none");
+		blockNone("lb266","none");	
+		$$D('av264').disabled=false; 
+	  }
+	}	
+}	 
+function notRinterested(){
+//alert('sound');
+  if($$D('av206')!= null){
+	  pnotrinterested = $$D('av206');}	  
+  if(pnotrinterested.checked){
+	   //alert("checked");
+		$$D('av205').value="";
+		$$D('av206').value="Y";
+		$$D('av205').disabled=true; 
+		}
+		else {
+		$$D('av206').value="";	
+		$$D('av205').disabled=false;
+		}}
+function notInterest(){
+//alert('soundariya');
+  if($$D('av206')!= null){
+	  pnotrinterested = $$D('av206'); 
+	  }	  
+  if(pnotrinterested.checked){
+	   //alert("checked");
+		$$D('p_course').value="";
+		$$D('av206').value="Y";
+		$$D('p_course').disabled=true; 
+		}
+		else {
+		$$D('av206').value="";	
+		$$D('p_course').disabled=false;
+		}}
+ function setSelectedSpanAuto() {
+         if (document.getElementById('ddsl_208') != null){
+        var el = document.getElementById('ddsl_208');
+        var text = el.options[el.selectedIndex].text;                   
+        document.getElementById('dds_208').innerHTML = text;
+        }
+     if (document.getElementById('ddsl_204') != null){
+        var el = document.getElementById('ddsl_204');
+        var text = el.options[el.selectedIndex].text;                   
+        document.getElementById('dds_204').innerHTML = text;
+        }
+	   if (document.getElementById('ddsl_189') != null){
+        var el = document.getElementById('ddsl_189');
+        var text = el.options[el.selectedIndex].text;                   
+        document.getElementById('dds_189').innerHTML = text;
+        }
+	  if (document.getElementById('ddsl_190') != null){
+        var el = document.getElementById('ddsl_190');
+        var text = el.options[el.selectedIndex].text;                   
+        document.getElementById('dds_190').innerHTML = text;
+        }
+
+    var dobValue = "";	
+    if(document.getElementById('dob_value')){
+    dobValue = document.getElementById('dob_value').value;
+    if(dobValue != "" && dobValue != "//" ){
+      var dobSplit = dobValue.split("/");
+
+      document.getElementById('dateSpan').innerHTML = dobSplit[0];
+      var month = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+      var dobMonth = dobSplit[1];
+      document.getElementById('monthSpan').innerHTML = month[dobMonth-1];
+      document.getElementById('yearSpan').innerHTML = dobSplit[2];
+      document.getElementById('dateDOB').value = dobSplit[0];
+      document.getElementById('monthDOB').value = dobSplit[1]; 
+      document.getElementById('yearDOB').value = dobSplit[2];	
+    }    
+  }
+   firstUnivChk();
+   notRinterested();
+  }
+  /*End email*/
+  /***webclicks logging***/
+ function webLinkClick(obj,College,Category, pURL,col,cpe){
+	var typeKey = "";
+	var typeKeypros = "";
+	if(Category!=undefined && Category!="") {
+	typeKey = Category.indexOf("H.ES.WC.");
+	}
+	if(typeKey==0){
+	  GAInteractionEventTracking('webclick','interaction','Webclick',col,cpe);
+	}    
+	if(pURL  !=null){
+	if(pURL.indexOf("p_url")>=0){var url1= pURL.substring(0,pURL.indexOf("p_url")+6); 
+	var url2= pURL.substring(pURL.indexOf("p_url")+6);
+	url2 = encodeURIComponent(url2);
+	pURL = url1 + url2;    
+	}
+	}
+	webclickDBLogging(pURL);
+}
+/***end webclicks logging***/
+ /***Sponsored, featured and ticker links logging***/
+ function statsLogging(obj,College,Category, pURL) {
+    if(pURL  !=null){
+      if(pURL.indexOf("p_url")>=0){
+        var url1= pURL.substring(0,pURL.indexOf("p_url")+6);
+        var url2= pURL.substring(pURL.indexOf("p_url")+6)
+            url2 = encodeURIComponent(url2);
+        pURL = url1 + url2;    
+       }
+    }
+    webclickDBLogging(pURL);
+ }
+  /***Inner links logging***/ 
+ function innerLinkClick(obj,College,Category, pURL) {
+    var extLink;	
+	var url = pURL;
+	if(obj.href){ extLink="&p_external_link="+encodeURIComponent(obj.href); }
+	if(extLink != null || extLink != ''){ url = url+extLink; }
+    if(pURL  !=null){
+      if(url.indexOf("p_url")>=0){
+        var url1= url.substring(0,url.indexOf("p_url")+6);
+        var url2= url.substring(url.indexOf("p_url")+6)
+            url2 = encodeURIComponent(url2);
+       url = url1 + url2;    
+       }
+    }
+    webclickDBLogging(url);
+  }
+  /*webclick DB Logging*/
+   function webclickDBLogging(pURL){    
+    var myVariables = ["x","a", "z", "w", "p", "i", "p_type", "p_url", "p_order_item_id", "p_opp_id", "p_external_link","p_source_order_item_id"];
+	var wigth = screen.width;
+    var parameters =  "";
+    var tempParam = "";
+    var paramarray = null;
+    if(pURL !=null && pURL !=''){
+      tempParam =  tempParam  + "&"+ pURL.substring(pURL.indexOf("?")+1);
+      paramarray = tempParam.split("&");
+    }
+    for (var mv=0; mv<myVariables.length; mv++){    
+       var currentparamvalue = "";
+          for (var n1=0; n1<paramarray.length; n1++){
+          if(paramarray[n1] !=null && paramarray[n1].indexOf(myVariables[mv]+"=")>=0) {
+               currentparamvalue = paramarray[n1].substring((myVariables[mv]+"=").length);
+           }
+          }
+       if(currentparamvalue != ''){
+              parameters = parameters + myVariables[mv]+"=" + currentparamvalue +"&";
+       }else{
+           parameters =  parameters + myVariables[mv]+"=" + "&"
+       } 
+     }
+    if(parameters !=null){
+       parameters = parameters.substring(0,parameters.length-1);
+    }   
+    var url='/pgs/pgs_interactive.web_click_db_log?'+parameters+"&p_screen_width="+wigth;
+    var webajax=new sack();
+    webajax.requestFile=url;
+    webajax.onCompletion=function(){}
+    webajax.runAJAX();
+   } 
+     /*videoClick viewed count Logging*/
+   function videoClickDBLogging(websiteVideoID){ 
+    var url='/pgs/pgstv_pkg.update_viewed_count_prc?p_website_video_id='+websiteVideoID;
+	//console.log(url);
+    var vclajax=new sack();
+    vclajax.requestFile=url;
+    vclajax.onCompletion=function(){}
+    vclajax.runAJAX();   
+   }
+   
+   function checkAll(checkname, exby) {   
+   if (!!checkname.length) {
+    for ( i = 0; i < checkname.length; i++ ) {
+        checkname[i].checked = exby.checked ? true : false;}
+    } 
+   else {
+   checkname.checked = exby.checked ? true : false;}   
+   }   
+   function uncheckall(obj,pname){
+	if (obj.checked==false){
+	  document.getElementById(pname).checked=false
+	  }
+  }
+
+function postenqiuiryPOClick(obj) {      
+   var po_course_id=document.getElementsByName("po_course_id");
+   var po_college_id=document.getElementsByName("po_college_id");
+   var po_suborder_item_id=document.getElementsByName("po_suborder_item_id");
+   var po_chekbox_id=document.getElementsByName("po_chekbox_id");
+   var pgalogflag=document.getElementsByName("p_ga_log_flag");
+   var pgacollege=document.getElementsByName("p_ga_college");
+   var pogacpevalue=document.getElementsByName("po_ga_cpe_value");
+   var puser_id = $$D("p_user_id");  
+   var pinteraction_flag=$$D("p_interaction_flag");
+   var pcourse_id = $$D("p_course_id"); 
+   var pcollege_id = $$D("p_college_id"); 
+   var psuborder_item_id = $$D("p_suborder_item_id"); 
+   var strSend="";
+   var wigth = screen.width;
+   var checkBoxalert = false;
+   for (var i=0;i<po_college_id.length;i++)
+   {
+     if (po_chekbox_id[i].checked)
+	 { 
+	  checkBoxalert = true;	  
+	 }
+   }
+   if (checkBoxalert == false )
+   {
+   $$D("ppolicy_errmsg").innerHTML=ErrorMessage.error_empty_postenquiry;blockNone("ppolicy_errdiv","block");
+   return false;
+   }
+   else
+   {
+   for (var i=0;i<po_college_id.length;i++){
+	 strSend = strSend+"&po_course_id="+po_course_id[i].value;
+	 strSend = strSend+"&po_college_id="+po_college_id[i].value;
+	 strSend = strSend+"&po_suborder_item_id="+po_suborder_item_id[i].value;
+	   if(po_chekbox_id[i].checked){
+	        strSend = strSend+"&po_chekbox_id=Y";
+			if (pgalogflag[i].value == 'E')
+			{
+			   GAInteractionEventTracking('email ', 'interaction ', 'Email-lightbox',pgacollege[i].value,pogacpevalue[i].value); 			 
+			}
+			else if (pgalogflag[i].value == 'DP')
+			{
+			   GAInteractionEventTracking('prosbutton ', 'interaction ', 'Prospectus-dl',pgacollege[i].value,pogacpevalue[i].value); 
+			}
+			else if (pgalogflag[i].value == 'RP')
+			{
+			   GAInteractionEventTracking('prosbutton ', 'interaction ', 'Prospectus',pgacollege[i].value,pogacpevalue[i].value); 
+			}
+	   }else
+	   {
+	    strSend = strSend+"&po_chekbox_id=N"; 
+	   }
+	 }	   
+	 strSend="p_course_id="+pcourse_id.value+"&p_user_id="+puser_id.value+"&p_college_id="+pcollege_id.value+"&p_suborder_item_id="+psuborder_item_id.value+"&p_interaction_flag="+pinteraction_flag.value+"&p_screen_width="+wigth+strSend;
+	
+	if (pinteraction_flag.value =='DP') 
+	{
+   var screenWidth = jqueryWidth();
+  if (screenWidth < 993){
+  //window.location.href = CommonObjects.pgs_context_path + "/pgs_interactive.do_post_enquiry_prc?" + strSend+'&'+pparam;
+  var url_decode = decodeURIComponent(CommonObjects.pgs_context_path + "/pgs_interactive.do_post_enquiry_prc?" + strSend);
+  createform(url_decode);
+  }else{
+        var ajaxURL = CommonObjects.pgs_context_path + "/pgs_interactive.do_post_enquiry_prc?" + strSend;
+        var ajax = new sack();
+        ajax.requestFile = ajaxURL;
+        ajax.onCompletion = function () {downloadResponse(ajax);};
+        ajax.runAJAX();}
+    } else {
+        showPGSLightBox('po-submit', '650', '350', strSend);
+    }
+    }
+     return false;
+   } 
+
+function changetexttopassword1(thisobj, defvalue,pswd_id,text_id){
+if(thisobj.value == defvalue){ 
+thisobj.value = '';
+ }
+ if(thisobj.type =="text"){ 
+ if(thisobj.id==text_id){
+ $$D(thisobj.id).style.display="none";
+ $$D(pswd_id).style.display="block";
+  $$D(pswd_id).focus();
+   }
+  }
+}
+
+function changePwdtoText1(thisobj, defvalue,pswd_id,text_id){
+if(thisobj.value == ''||thisobj.value==defvalue)
+{
+if(thisobj.type =="password"){ 
+if(thisobj.id==pswd_id){
+  $$D(thisobj.id).style.display="none";
+  $$D(text_id).style.display="block";
+   }
+  }
+//thisobj.value = defvalue;
+}
+}	
+
+ function myPgsClick(obj) { 
+  //console.log ('comming soundariya');
+   blockNone("sve","none");
+   blockNone("loader","block");
+   var errorfound = "FALSE";
+   var strSend="";
+   var crsStartyear = getradioValue('p_crsstarttyear');
+   
+   var puser_id = trimString($$D("p_user_id").value);
+   var pemail = $$D("p_email"); var pemail_hidden = $$D("p_email_hidden");blockNone("pemail_errdiv","none");pemail.className="";
+   var pname = $$D("p_firstname"); var pname_hidden = $$D("p_firstname_hidden");blockNone("pname_errdiv","none");pname.className="";
+   var psurname = $$D("p_lastname"); var psurname_hidden = $$D("p_lastname_hidden");blockNone("psurname_errdiv","none");psurname.className=""; 
+   var paddr1 = $$D("p_addr_1"); var paddr1_hidden = $$D("p_addr1_hidden");
+   var paddr2 = $$D("p_addr_2"); var paddr2_hidden = $$D("p_addr2_hidden");
+   var ptown = $$D("p_townc"); var ptown_hidden = $$D("p_townc_hidden");
+   var pnationality = $$D("p_nationality"); 
+   var penqcountry_hidden = $$D("p_nationality_hidden");
+   var pcountry = $$D("p_country");
+   var pcountry_hidden = $$D("p_country_hidden");
+   var penqpc = $$D("p_enqpc");
+   var penqpc_hidden = $$D("p_enqpc_hidden");
+   //var pdob =  $$D('p_dob');blockNone("pdob_errdiv","none");
+   //var dateDob = $$D('dateDOB').value;
+   //var monthDob = $$D('monthDOB').value;
+   //var yearDob = $$D('yearDOB').value;
+   //var finalDob ="";
+   var exp = "/(?=*[!@#$%^&*])$/";
+   
+	//alert(crsStartyear);
+	//alert(trimString($$D("p_addr1").value) + 'address');
+	//alert(trimString($$D("p_addr2").value) + 'address22');
+	
+   //$$D('p_dob').value = finalDob;
+   var pyear = $$D('crsstartyear_3').value;
+   var dateValid = "";
+   setCookie('PGS_YOE',crsStartyear, '', '/', '', '');
+	
+   if(isEmpty(pemail.value) || pemail.value == pemail_hidden.value){pemail.className = setErrborder;   
+     errorfound = "TRUE";$$D("pemail_errmsg").innerHTML=ErrorMessage.error_empty_email;blockNone("pemail_errdiv","block");}	
+	else{
+   if(!isValidEmail(trimString(pemail.value))){pemail.className = setErrborder;errorfound = "TRUE";$$D("pemail_errmsg").innerHTML=ErrorMessage.error_invalid_email;blockNone("pemail_errdiv","block");}} 
+   if(isEmpty(pname.value) || pname.value == pname_hidden.value){pname.className = setErrborder;   
+    errorfound = "TRUE";$$D("pname_errmsg").innerHTML=ErrorMessage.error_empty_firstname;blockNone("pname_errdiv","block");}
+   if(isEmpty(psurname.value) || psurname.value == psurname_hidden.value){psurname.className = setErrborder;   
+    errorfound = "TRUE";$$D("psurname_errmsg").innerHTML=ErrorMessage.error_empty_lastname;blockNone("psurname_errdiv","block");}
+ 	//if(!isEmpty(dateDob) || !isEmpty(monthDob) || !isEmpty(yearDob)){		
+	//dateValid = isValidDOBDate(dateDob,monthDob,yearDob);		
+		//if(dateValid != 'valid')
+		//{
+			//errorfound = "TRUE";
+			//$$D("pdob_errmsg").innerHTML=dateValid;
+			//blockNone("pdob_errdiv","block");
+					
+		//}
+		//else{ blockNone("pdob_errdiv","none");}
+	  // finalDob = dateDob+"/"+monthDob+"/"+yearDob;
+	//}
+	if(isEmpty(crsStartyear) || isEmpty(crsStartyear) || isEmpty(crsStartyear)){//pdob.className = setErrborder;   
+    errorfound = "TRUE";$$D("pyoe_errmsg").innerHTML=ErrorMessage.error_empty_yoe;blockNone("pyoe_errdiv","block");}
+   if(errorfound == "FALSE"){	
+    strSend = strSend+"p_user_id="+puser_id
+                   +"&p_email="+$$D("p_email").value
+                   +"&p_firstname="+$$D("p_firstname").value
+				   +"&p_lastname="+$$D("p_lastname").value
+				   +"&p_nationality="+$$D("p_nationality").value
+				   +"&p_crsstarttyear="+crsStartyear
+				   +"&p_country="+$$D("p_country").value
+				   +"&p_enqpc="+chkdefaultValue($$D("postcoder").value,'Please enter post code')
+				   +"&p_addr1="+encodeURIComponent(trimString($$D("p_addr1").value))
+				   +"&p_addr2="+encodeURIComponent(trimString($$D("p_addr2").value))
+				   +"&p_townc="+encodeURIComponent(trimString($$D("p_townc").value))+strSend;
+				  // +"&p_dob="+finalDob+strSend;	   
+    //alert (strSend + 'soundariya 2');				   
+	var ajaxURL = CommonObjects.pgs_context_path+"/pgs_user_profile_pkg.do_mydetails_prc?" + strSend;
+    var ajax=new sack();
+    ajax.requestFile = ajaxURL;
+	//alert('soundariya 1');
+     ajax.onCompletion = function(){myPgsResponse(ajax); };	
+     ajax.runAJAX();    
+     return false; 
+	// bForm.submit();
+	 }else if(errorfound == "TRUE"){
+	 window.location.hash = "bitop";
+	 blockNone("sve","block");
+     blockNone("loader","none"); 
+	 hm();
+    // blockNone("p_update","none");
+	 }
+    return false;
+ } 
+
+
+ function update_prof_email (){
+    var market_mail   = $$D('market').value;
+    var solus_mail    = $$D('solus').value;
+    var reminder_mail = $$D('reminder').value;
+    var survey_flag   = $$D('survey').value;
+    //var permit_mail   = $$D('allmail').value;
+    var user_id       = $$D('valid_user_id').value;
+    var url = '/pgs/pgs_user_profile_pkg.save_user_subscription_prc?p_user_id='+user_id+'&p_receive_no_email_flag='+reminder_mail+'&p_solus_email='+solus_mail+'&p_marketing_email='+market_mail+'&p_survey_flag='+survey_flag;
+    var ajax=new sack();
+    ajax.requestFile = url;
+    ajax.onCompletion = function(){};	
+    ajax.runAJAX();  
+  };
+  
+ function myPgsResponse(ajax){
+   var response = ajax.response;
+   if(trimString(response) == 'SUCCESS'){ 
+    //alert('SUCCESS soundariya');
+	update_prof_email ();
+    var puser_id = trimString($$D("p_user_id").value);
+	var p_option_id=document.getElementsByName("p_option_id");
+    var p_attr_val_display_seq=document.getElementsByName("p_attr_val_display_seq");
+    var p_attribute_value=document.getElementsByName("p_attribute_value");
+    var p_attribute_id=document.getElementsByName("p_attribute_id");  
+	var p_default_value=document.getElementsByName("p_default_value");  
+	var empstatus = getradioValue('p_status');
+	var studymode;
+    var strSend="";
+	strSend = strSend+"p_user_id="+puser_id;
+    for (var i=0; i<p_option_id.length; i++)
+	{
+	 if (p_attribute_id[i].value!='276' && p_attribute_id[i].value!='277' ) {
+	 if (p_attribute_id[i].value=='273'){
+	        p_option_id[i].value = empstatus;	 
+	    }	    
+	 strSend = strSend+"&p_option_id=" + p_option_id[i].value;
+	 strSend = strSend+"&p_attr_val_display_seq=" + p_attr_val_display_seq[i].value;		
+	 if(p_attribute_id[i].type == "checkbox")
+	 {
+   	  if($$D('av'+p_attribute_id[i].value).checked){
+	   strSend = strSend+"&p_attribute_value=Y";
+	   }else{
+	   strSend = strSend+"&p_attribute_value=N"; 	   
+	   }
+	 }else  
+	 {
+	    if (p_default_value[i].value == p_attribute_value[i].value)
+	    {
+	      p_attribute_value[i].value="";
+	   }	 
+	    strSend = strSend+"&p_attribute_value="+encodeURIComponent(p_attribute_value[i].value); 
+		//alert(strSend + 'strSend soundariya');
+	  }	 
+	  strSend = strSend+"&p_attribute_id="+p_attribute_id[i].value; 
+	  } else {
+	  	   if (p_attribute_id[i].value=='276' || p_attribute_id[i].value=='277')
+		  {
+		     if (p_attribute_id[i].value=='276'){
+			  var p_studymodechk=document.getElementsByName("CHKB_STUDY_MODE");
+			 } else {
+			  var p_studymodechk=document.getElementsByName("CHKB_DEGREE_TYPE");
+			 }		     
+			 for (var j=0; j<p_studymodechk.length; j++)
+			 {
+			 //alert( 'cmg');
+			 if(p_studymodechk[j].checked){	
+			 if (p_studymodechk[j].value == 487)
+			 {
+			 p_attr_val_display_seq[i].value = 1;
+			// alert(p_attr_val_display_seq[i].value);
+			 }
+			 else if (p_studymodechk[j].value == 488)
+			 {
+			 p_attr_val_display_seq[i].value = 2;
+			 }
+			 else if (p_studymodechk[j].value == 529)
+			 {
+			 p_attr_val_display_seq[i].value = 3;
+			 }
+			 else if (p_studymodechk[j].value == 489)
+			 {
+			 p_attr_val_display_seq[i].value = 1;
+			 }
+			 else if (p_studymodechk[j].value == 490)
+			 {
+			 p_attr_val_display_seq[i].value = 2;
+			 }
+			 else if (p_studymodechk[j].value == 491)
+			 {
+			 p_attr_val_display_seq[i].value = 3;
+			 }
+			  //alert ('p_attr_val_display_seq[i].value' + p_attr_val_display_seq[i].value);
+			  //alert ('p_attribute_value[i].value' + encodeURIComponent(p_attribute_value[i].value));
+			  //alert ('p_attribute_id[i].value' + p_attribute_id[i].value);
+			  
+				  strSend = strSend+"&p_attribute_id="+p_attribute_id[i].value;   
+				  strSend = strSend+"&p_option_id=" + p_studymodechk[j].value;
+				  strSend = strSend+"&p_attr_val_display_seq="+ p_attr_val_display_seq[i].value;
+				  strSend = strSend+"&p_attribute_value="+encodeURIComponent(p_attribute_value[i].value); 		     
+			   }			  
+			 }
+		   }	  
+	   } 
+	 }	 
+	 //alert(strSend + "soundariya");
+	 var ajaxURL = CommonObjects.pgs_context_path+"/pgs_user_profile_pkg.do_mydetails_attr_prc?" + strSend;
+     var ajax=new sack();
+	//alert(ajaxURL);
+     ajax.requestFile = ajaxURL;
+     ajax.onCompletion = function(){mypgsresp(ajax);};   // function(){document.location.reload(true);};
+     ajax.runAJAX();    
+     return false; 	
+    }	
+   else{
+   
+     if( trimString(response) == 'FAILED' ){
+	    location.reload(); 
+	 }
+	 else{
+      $$D("lightbx").innerHTML=response; 
+	  $$D("ajax-div").style.display="none";  
+	  $$D("lightbx").style.display="block";
+	  $$D("newvenueform").style.display="block";    
+	 }
+   }
+ }
+ 
+ function mypgsresp(ajax)
+ { var resp = ajax.response;
+ if(trimString(resp) == 'SUCCESS')
+ {
+ $$D("sve").style.display="block";
+ $$D("loader").style.display="none";
+ var randnum = Math.floor((Math.random()*10000000)+1);
+ var detail ='/pgs/pgs_user_profile_pkg.get_mydetails_prc?p_div_id=Y';
+ if($$D("mail_a_href")){
+    if($$D("mail_a_href").value != ""){
+	   resetSettings();
+	 }
+	 else{ 
+	      window.location.href = detail;
+	  }
+ }else{
+       window.location.href = detail;
+   }
+ }
+ }
+ 
+  
+ function setSelectedtoSpanS(obj, spanid){
+   var selectionId = obj.id
+   var el = document.getElementById(selectionId);
+   var text = el.options[el.selectedIndex].text;
+   document.getElementById(spanid).innerHTML = text;
+   if(spanid == 'dds_190'){
+      var countryOfRes = obj.value;
+      if(countryOfRes != null && countryOfRes == '55' ||countryOfRes == '139' ||countryOfRes == '256' ||countryOfRes == '257'){
+        $$D('addFinder').style.display= 'block';
+		$$D('postcodeidx').style.display ='block';
+		//$$D('postaddid').style.display= 'block';
+      }else{
+        $$D('addFinder').style.display= 'none';
+		$$D('postaddid').style.display= 'none';
+		$$D('postcodeidx').style.display ='none';
+      }     
+     }
+	 
+     }
+	 
+  function setSelectedtoSchSpanS(id, spanid){
+  if (document.getElementById(id) != null){
+   var text = $$D(id).options[$$D(id).selectedIndex].text;
+    $$D(spanid).innerHTML = text; }
+   }
+
+function setSelectedSpanAutoS(){	 
+/*var pdob = "";	
+    if(document.getElementById('p_dob')){
+    pdob = document.getElementById('p_dob').value;
+    if(pdob != "" && pdob != "//" ){
+      var dobSplit = pdob.split("/");
+//alert(pdob);
+      document.getElementById('dateSpan').innerHTML = dobSplit[0];
+      var month = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+      var dobMonth = dobSplit[1];
+      document.getElementById('monthSpan').innerHTML = month[dobMonth-1];
+      document.getElementById('yearSpan').innerHTML = dobSplit[2];
+      document.getElementById('dateDOB').value = dobSplit[0];
+      document.getElementById('monthDOB').value = dobSplit[1]; 
+      document.getElementById('yearDOB').value = dobSplit[2];	
+    }    
+  }*/
+   setSelectedtoSchSpanS('ddsl_208','dds_208');
+   setSelectedtoSchSpanS('ddsl_272','dds_272');
+   setSelectedtoSchSpanS('ddsl_274','dds_274');
+   setSelectedtoSchSpanS('ddsl_275','dds_275');
+   firstUnivChk();	
+   notInterest();
+}
+ function collegeAutoComplete(obj,paramToExternalFile,e){
+     var urlPrc = 'pgs_ajax_pkg.ajax_search_college';
+     var param1 = 'p_ajax_type=U';// Ajax type 
+	 //$$D("pFirstUniv_hidden").value ="";
+     ajax_showOptions(obj,paramToExternalFile,e,urlPrc,param1);
+    }
+ function allcollegeAutoComplete(obj,paramToExternalFile,e){
+     var urlPrc = 'pgs_ajax_pkg.ajax_search_college';
+     var param1 = 'p_ajax_type=A';// Ajax type	 
+     $$D("pFirstUniv_hidden").value ="";
+     ajax_showOptions(obj,paramToExternalFile,e,urlPrc,param1);
+    }
+	
+  function courseAutoCompletemypgs(obj,paramToExternalFile,e){
+     var urlPrc = 'pgs_ajax_pkg.ajax_search_course';     
+     var pcId = trimString($$D("pFirstUniv_hidden").value);
+	 $$D("p_attribute_value_hidden").value ="";//to nullify the course id.
+     var param1 = 'p_ug_option=Y&p_ajax_type=C&p_college_id='+pcId;// Ajax type 
+     ajax_showOptions(obj,paramToExternalFile,e,urlPrc,param1);
+    }
+	
+  function GAInsightEventTracking(college_id,course_id,flag)
+  {
+    var url='/pgs/pgs_interactive.webclick_insight_ga_prc?w='+course_id+'&z='+college_id+'&webclick_flag='+flag;
+    var ajax=new sack();
+    ajax.requestFile=url;
+    ajax.onCompletion=function(){GAInsightComplete(ajax)}
+    ajax.runAJAX();
+  }
+  function GAInsightComplete(ajax)
+  {
+   var resp = ajax.response;
+  if(resp != null && resp!=' ')
+     {
+	 eval(resp);
+     }	 
+  }
+  
+ //*************NEW REQUEST PROSPECTUS FORM SUBMIT VALIDATION************
+ //PGS_20160621
+function reqProsSubmit(obj) { 
+   var errorfound = "FALSE";
+   var GArequest_flag  = trimString($$D("GArequest_flag_hidden").value);
+   var GAdown_flag  = trimString($$D("GAdownl_flag_hidden").value);
+   var ga_collegeName = $$D("ga_college_name").value;
+   var ga_cpeValue = $$D("ga_cpe_value").value;  
+   var crsStartyear = getradioValue('p_crsstarttyear');   
+   var pname = $$D("p_name"); var pname_hidden = $$D("p_name_hidden");blockNone("p_name_errmsg","none");//pname.className="adiptxt";   
+   var psurname = $$D("p_surname"); var psurname_hidden = $$D("p_surname_hidden");blockNone("p_surname_errmsg","none");//psurname.className="adiptxt";   
+   var pemail = $$D("p_email"); var pemail_hidden = $$D("p_email_hidden");blockNone("p_email_errmsg","none");//pemail.className="adiptxt";   
+   var paddr1 = $$D("p_addr_1"); var paddr1_hidden = $$D("p_addr1_hidden");blockNone("paddr1_errdiv","none");//paddr1.className="adiptxt";   
+   var paddr2 = $$D("p_addr_2"); var paddr2_hidden = $$D("p_addr2_hidden");   
+   var ptown = $$D("p_town"); var ptown_hidden = $$D("p_town_hidden");//ptown.className="adiptxt";   
+   var penqpc = $$D("p_enqpc"); var penqpc_hidden = $$D("p_enqpc_hidden");
+   var penqcountry = $$D("country_name");
+   var countryId = $$D("p_enqcountry_rq").value;
+   var postcode=$$D("post_code");
+   var penqcountry_hidden = $$D("p_enqcountry_hidden");blockNone("p_country_errmsg","none");	   
+   //var dobDate  = $$D("p_date"); //blockNone("p_dob_errmsg","none");		//PGS_20150811
+   //var dMonth   = $$D("p_month");   
+   //var dobYear  = $$D("p_year"); 
+   var pc; var cpc; var perror_id =""; var validemail="N";
+   var requProspectus = $$D("requ_prospectus").value; var downProspectus = $$D("down_prospectus").value;
+   var marketing_flag = $$D("market").value;
+   var souls_flag = $$D("solus").value;
+   var survey_flag = $$D("survey").value;
+   var receive_no_flag = 'N';
+   if($$D("pass")!=null)
+   var ppassword  = $$D("pass").value;
+   var wigth = screen.width;
+   setCookie('PGS_YOE',crsStartyear, '', '/', '', '');
+	
+   if(isEmpty(pname.value) || pname.value == pname_hidden.value){
+		errorfound = "TRUE";
+		blockNone("p_name_errmsg","block");
+		if(perror_id==""){ perror_id = pname.id; }
+		$('#'+pname.id).removeClass("err_rte");
+		$('#'+pname.id).addClass("err_wrg");
+	}
+   if(isEmpty(psurname.value) || psurname.value == psurname_hidden.value){
+	    errorfound = "TRUE";
+		blockNone("p_surname_errmsg","block");
+		if(perror_id==""){ perror_id = psurname.id; }
+		$('#'+psurname.id).removeClass("err_rte");
+		$('#'+psurname.id).addClass("err_wrg");
+	}
+   /*if(isEmpty(pemail.value) || pemail.value == pemail_hidden.value){
+		$('#'+pemail.id).removeClass("err_rte");
+		$('#'+pemail.id).addClass("err_wrg");  
+		errorfound = "TRUE";
+		blockNone("p_email_errmsg","block");
+		$$D("p_email_errmsg").innerHTML="We need this so we can send you..well emails obviously.";
+	}	
+	else{
+		if(!isValidEmail(trimString(pemail.value))){
+			$('#'+pemail.id).removeClass("err_rte");
+			$('#'+pemail.id).addClass("err_wrg"); 
+			errorfound = "TRUE";
+			blockNone("p_email_errmsg","block");
+			$$D("p_email_errmsg").innerHTML="Something seems to be missing from your email. Awkward.";
+			}
+    }*/ 
+   if(isEmpty(pemail.value)){ pemail.className = "adiptxt err_wrg"; errorfound = "TRUE";
+		$$D("p_email_errmsg").innerHTML="We need this so we can send you..well emails obviously.";blockNone("p_email_errmsg","block");
+		if(perror_id==""){ perror_id = pemail.id; } }
+   else{ if(!isValidEmail(trimString(pemail.value))){pemail.className = "adiptxt err_wrg";errorfound = "TRUE";
+	    $$D("p_email_errmsg").innerHTML="Something seems to be missing from your email. Awkward.";
+		blockNone("p_email_errmsg",'block');if(perror_id==""){ perror_id = pemail.id; } }
+		else{ validemail="Y";}		
+		} 	
+	if($("#p_dob_errmsg").is(":visible")){ errorfound = "TRUE"; }
+	/*if(dobDate.value == "" || dMonth.value == "" || dobYear.value == ""){		
+		errorfound = "TRUE";
+		if(perror_id==""){ perror_id = dobDate.id; }
+		$$D("p_dob_errmsg").innerHTML="Happy birthday to you on the.....?";
+		blockNone("p_dob_sucmsg",'none');
+		blockNone("p_dob_errmsg","block");	
+		dobDate.className="adiptxt err_wrg";			
+		dMonth.className="adiptxt err_wrg";							
+		dobYear.className="adiptxt err_wrg";
+	}*/   
+	if(trimString(penqcountry.innerHTML) == "Country of residence*"){		
+		errorfound = "TRUE";
+		$('#'+'country_fld').removeClass("err_rte");
+		$('#'+'country_fld').addClass("err_wrg");
+		blockNone("p_country_errmsg","block");		
+	}/*else if(countryId == "55" || countryId == "139" || countryId == "256" || countryId == "257"){
+		pc = $$D("post_code").value; cpc = isValidUKpostcode(pc);		
+		if(cpc){ blockNone("p_postcode_errmsg","none");	postcode.className="adiptxt err_rte";}
+		else { errorfound = "TRUE"; blockNone("p_postcode_errmsg","block"); postcode.className="adiptxt err_wrg"; }		
+	}*/	
+	/*if ($$D("post_code").value == "" || $$D("post_code").value == null){
+		$('#'+'post_code').removeClass("err_rte");
+		$('#'+'post_code').addClass("err_wrg");
+	}*/	
+	 
+	if($$D("pass")!=null){
+	 
+	 if (isEmpty($$D("pass").value)) {
+        $$D("pass").className = "adiptxt err_wrg";
+        $$D("pass_errmsg").innerHTML = "This is awkward, what's your password?";
+        blockNone("pass_errmsg","block");
+        errorfound = "TRUE"
+        if (perror_id == "") {
+            perror_id = ppassword.id;
+        }
+    }
+	if (!isEmpty(trimString($$D("pass").value)) && ($$D("pass").value).length < 6) {
+         $$D("pass").className = "adiptxt err_wrg";
+        $$D("pass_errmsg").innerHTML = "Your password should be 6 characters or more.";
+        blockNone("pass_errmsg","block");
+        errorfound = "TRUE";
+        if (perror_id == "") {
+            perror_id = ppassword.id;
+        }
+    }
+	else {
+        ppassword.className = "adiptxt err_rtg";
+        blockNone("pass_sucmsg", "block");
+    }
+	}
+
+    if (marketing_flag == 'true'){
+         marketing_flag = 'Y';
+    }
+     if (souls_flag == 'true') {
+         souls_flag = 'Y';
+    }
+     if (survey_flag == 'true') {
+         survey_flag = 'Y';
+    }
+    if ($$D("p_policy_enquiry")) {
+        ppolicy = $$D("p_policy_enquiry");
+        blockNone("p_policy_enquiry_err", "none");
+        ppolicyChecked = ppolicy.checked;
+        if (ppolicy.checked == false) {
+            blockNone("p_policy_enquiry_err", "block");
+            errorfound = "TRUE";
+            if (perror_id == "") {
+                perror_id = "p_policy_enquiry";
+            }
+        }
+    }	
+   if(isEmpty(paddr1.value) || paddr1.value == paddr1_hidden.value){
+		$('#'+paddr1.id).removeClass("err_rte");
+		$('#'+paddr1.id).addClass("err_wrg");  
+		if(perror_id==""){ perror_id = paddr1.id; }
+	   errorfound = "TRUE";} 
+   if(isEmpty(ptown.value) || ptown.value == ptown_hidden.value){
+		$('#'+ptown.id).removeClass("err_rte");
+		$('#'+ptown.id).addClass("err_wrg");  
+		if(perror_id==""){ perror_id = ptown.id; }     	
+		errorfound = "TRUE";}    
+    if((countryId == "55" || countryId == "139" || countryId == "256" || countryId == "257") ){
+		if(isEmpty(penqpc.value)){
+			if(perror_id==""){ perror_id = penqpc.id; }
+		    errorfound = "TRUE"; blockNone("p_enqpc_errmsg","block"); penqpc.className="adiptxt err_wrg";
+		}
+	    else{ pc = penqpc.value; cpc = isValidUKpostcode(pc);		
+			if(cpc){ blockNone("p_enqpc_errmsg","none");	blockNone("p_enqpc_sucmsg","block"); penqpc.className="adiptxt err_rte";}
+			else { if(perror_id==""){ perror_id = penqpc.id; }
+			errorfound = "TRUE"; blockNone("p_enqpc_sucmsg","none"); blockNone("p_enqpc_errmsg","block"); penqpc.className="adiptxt err_wrg"; 									
+			}
+		}
+	}	
+   var ppolicy =""; var pregister="";
+   var ppolicyChecked=""; var pregisterChecked="true";
+   setTimeout(function(){ if($$D("userexists").value=="" && validemail == "Y") {  			   
+			   if($$D("alEmailExists").value=="Y"){errorfound = "TRUE"; if(perror_id==""){perror_id = pemail.id;} }
+			   else{pemail.className = "adiptxt err_rte"; blockNone("p_email_errmsg",'none'); blockNone("p_email_sucmsg",'block');} }   
+   if(errorfound == "FALSE"){
+    if($$D("pass")!=null)
+    var em_password = trimString($$D("pass").value);
+    hideSubmitButton('ord');				   
+    var strSend = "p_country_id="+$$D("p_enqcountry_rq").value
+		           +"&p_addr1="+encodeURIComponent(trimString($$D("p_addr_1").value))
+				   //+"&p_addr2="+encodeURIComponent(trimString($$D("p_addr_2").value))
+				   +"&p_town="+encodeURIComponent(trimString($$D("p_town").value))
+                    +"&p_bcat="+$$D("p_bcat").value 
+                    +"&p_bloc="+$$D("p_bloc").value 
+                    +"&p_qual="+$$D("p_qual").value 
+                    +"&p_stdy="+$$D("p_stdy").value 
+                    +"&x="+$$D("x").value 
+                    +"&a="+$$D("a").value 
+                    +"&z="+$$D("z").value 
+                    +"&w="+$$D("w").value 
+					+"&p_user_id="+$$D("p_user_id").value
+                    +"&p_order_item_id="+$$D("p_order_item_id").value+"&p_marketing_flag=" + marketing_flag +
+			        "&p_souls_flag=" + souls_flag +"&p_survey_flag=" + survey_flag +"&p_receive_flag=" + receive_no_flag+"&p_screen_width="+wigth;
+	                
+	if(!(isEmpty(paddr2.value)) && paddr2.value != paddr2_hidden.value){
+		strSend = strSend +"&p_addr2="+encodeURIComponent(trimString($$D("p_addr_2").value));}
+    strSend = strSend +"&p_register=" + pregisterChecked +"&p_crsstarttyear="+crsStartyear;	
+	if(requProspectus == "true"){
+		strSend = strSend +"&p_enqpc="+trimString(penqpc.value)
+				          +"&p_country="+encodeURIComponent(trimString(penqcountry.innerHTML)); 
+		if (GArequest_flag == 'N'){
+			GAInteractionEventTracking('prosbutton','interaction','Prospectus',ga_collegeName,ga_cpeValue);/*GA Logging*/
+		}
+		$$D("lbxInner").innerHTML = "";
+		// alert("a");
+		var url = "/pgs/pgs_interactive.do_request_prospectus_new?" + strSend;
+		var screenWidth = jqueryWidth();
+		if ( (screenWidth < 993) ) {
+        url = url + "&p_name="+trimString(pname.value) 
+		+ "&p_surname="+trimString(psurname.value)
+        +"&p_email="+trimString(pemail.value)
+		+"&p_password="+encodeURIComponent(em_password);  
+        createform(url);
+        return;       
+		}
+		else {
+			sm('newvenueform', '650', '350', 'prospectus-submit');
+			if ($$D("newlbx").style.display="block"){blockNone('newlbx','none');$$D("newlbx").innerHTML="";}
+			$$D("ajax-div").style.display = "block";
+			$$D("lightbx").style.display = "block";	 
+			var ajax = new sack();
+			ajax.setVar("p_name", trimString(pname.value));
+			ajax.setVar("p_surname", trimString(psurname.value));
+			ajax.setVar("p_email", trimString(pemail.value));
+			ajax.setVar("p_password", encodeURIComponent(em_password));
+			ajax.requestFile = url; // Specifying which file to get
+			ajax.onCompletion = function(){displayFormData(ajax, 'email-submit');}; // Specify function that will be executed after file has been found
+			ajax.runAJAX();
+			//showPGSLightBox('prospectus-submit','650','550', strSend);	//PGS_20160726 fix 
+		  }	
+	 }
+	   //strSend = strSend+"&p_screen_width="+wigth;
+	 else if(downProspectus == "true"){
+		strSend = strSend +"&p_postcode="+trimString(penqpc.value);
+		if (GAdown_flag == 'N'){
+			GAInteractionEventTracking('prosbutton','interaction','Prospectus-dl',ga_collegeName,ga_cpeValue);/*GA Logging*/
+		}
+		var screenWidth = jqueryWidth();
+		if (screenWidth < 993){
+		  //window.location.href = CommonObjects.pgs_context_path+"/pgs_interactive.do_download_prospectus?"+strSend+'&'+pparam;
+			var url_decode = CommonObjects.pgs_context_path+"/pgs_interactive.do_download_prospectus?"+strSend;
+			createform(url_decode);
+			return false;
+		}else{
+			var ajaxURL = CommonObjects.pgs_context_path+"/pgs_interactive.do_download_prospectus?"+strSend;
+			var ajax=new sack();
+			ajax.setVar("p_name", trimString(pname.value));
+			ajax.setVar("p_surname", trimString(psurname.value));
+			ajax.setVar("p_email", trimString(pemail.value));
+			ajax.setVar("p_password", encodeURIComponent(em_password));
+			ajax.requestFile = ajaxURL;
+			ajax.onCompletion = function(){newDownloadResponse(ajax);};	
+			ajax.runAJAX();    
+			return false;
+		} }	} else { if($$D(perror_id)){ $$D(perror_id).focus(); } } },2000);
+    return false;
+ };
+ 
+ function newDownloadResponse(ajax){
+   $$D("lbxInner").innerHTML = "";
+   var response = ajax.response.split(CommonObjects.split_char);   
+   var dpUrl="";
+   var dpUrl1="";
+   var dpUrl2="";
+   var dpUrl3="";
+   sm('newvenueform','650','250','po-submit');
+   $$D("ajax-div").style.display="block";
+   $$D("lightbx").style.display="block";   
+   if(response[0] !=null && response[0]  == 'SUCCESS'){ 
+        if (response[1] !=null){	
+		    dpUrl =response[1];		    
+			window.open(dpUrl,'_blank');
+			$$D("lightbx").innerHTML=response[2]; 
+	        $$D("ajax-div").style.display="none";  
+	        $$D("lightbx").style.display="block";
+	        $$D("newvenueform").style.display="block"; 
+ var elements =  $("script[id^='iterate']");
+  if(elements.length>0)
+  {
+   for (var i=1; i<=elements.length; i++) {
+    //alert($$D('iterate'+i).innerHTML);
+    eval($$D('iterate'+i).innerHTML);
+   }
+   }
+   }
+   }
+   else if (response[0] !=null && ( response[0]  == '\nSUCCESS' || response[0]  == 'SUCCESS' || response[0].indexOf("SUCCESS") > 0 ))
+   {
+		if (response[1] !=null && response[1] !='REQ_PROSPECTOS')
+		{	
+			dpUrl =response[1];		    
+			window.open(dpUrl,'_blank');
+		}
+		if (response[2] !=null && response[2] !='REQ_PROSPECTOS')
+		{	
+			dpUrl1 =response[2];		    
+			window.open(dpUrl1,'_blank');
+		}
+		if (response[3] !=null && response[3] !='REQ_PROSPECTOS')
+		{	
+			dpUrl2 =response[3];		    
+			window.open(dpUrl2,'_blank');
+		}
+		if (response[4] !=null && response[4] !='REQ_PROSPECTOS')
+		{	
+			dpUrl3 =response[4];		    
+			window.open(dpUrl3,'_blank');
+		}	 
+		 $$D("lightbx").innerHTML=response[5]; 
+	     $$D("ajax-div").style.display="none";  
+	     $$D("lightbx").style.display="block";
+	     $$D("newvenueform").style.display="block"; 
+		 var elements =  $("script[id^='iterate']");
+         if(elements.length>0)
+         {
+         for (var i=1; i<=elements.length; i++) {
+         //alert($$D('iterate'+i).innerHTML);
+         eval($$D('iterate'+i).innerHTML);
+         }
+         }	
+   }
+   else{
+       $$D("lightbx").innerHTML=response; 
+	   $$D("ajax-div").style.display="none";  
+	   $$D("lightbx").style.display="block";
+	   $$D("newvenueform").style.display="block";
+       var elements =  $("script[id^='iterate']");
+         if(elements.length>0)
+         {
+         for (var i=1; i<=elements.length; i++) {
+         //alert($$D('iterate'+i).innerHTML);
+         eval($$D('iterate'+i).innerHTML);
+         }
+         }		   
+   }
+ };
+ 
+ function changeProspectusTab(divid){
+    if(divid == "bypost" && $$D("down_prospectus").value == "true") {	
+	    $$D("p_name").className="adiptxt"; blockNone("p_name_errmsg","none"); blockNone("p_name_sucmsg","none");
+		$$D("p_surname").className="adiptxt"; blockNone("p_surname_errmsg","none"); 
+		$$D("p_email").className="adiptxt"; blockNone("p_email_errmsg","none"); blockNone("p_email_sucmsg","none");
+		//$$D("p_date").className="adiptxt"; blockNone("p_dob_errmsg","none"); 
+		//$$D("p_month").className="adiptxt"; blockNone("p_dob_errmsg","none"); 
+		//$$D("p_year").className="adiptxt"; blockNone("p_dob_errmsg","none");
+		$$D("p_addr_1").className="adiptxt"; $$D("p_town").className="adiptxt"; $$D("post_code").className="adiptxt"; 
+		blockNone("p_postcode_errmsg","none"); blockNone("p_postcode_sucmsg","none");
+		$$D("country_fld").className="sbx"; blockNone("p_country_errmsg","none");		
+        $('#bydownld').removeClass("dwnl_tabact");
+        $('#bypost').addClass("dwnl_tabact");
+        $$D("requ_prospectus").value = "true";
+        $$D("down_prospectus").value = "false";
+		blockNone("downloadtext","none");
+		blockNone("downloadbtn","none");
+		blockNone("getprostext","block");
+		blockNone("getprosbtn","block");
+    }else if(divid == "bydownld" && $$D("requ_prospectus").value == "true"){
+	    $$D("p_name").className="adiptxt"; blockNone("p_name_errmsg","none"); blockNone("p_name_sucmsg","none");
+		$$D("p_surname").className="adiptxt"; blockNone("p_surname_errmsg","none"); 
+		$$D("p_email").className="adiptxt"; blockNone("p_email_errmsg","none"); blockNone("p_email_sucmsg","none");
+		//$$D("p_date").className="adiptxt"; blockNone("p_dob_errmsg","none"); 
+		//$$D("p_month").className="adiptxt"; blockNone("p_dob_errmsg","none"); 
+		//$$D("p_year").className="adiptxt"; blockNone("p_dob_errmsg","none");
+		$$D("p_addr_1").className="adiptxt"; $$D("p_town").className="adiptxt"; $$D("post_code").className="adiptxt"; 
+		blockNone("p_postcode_errmsg","none"); blockNone("p_postcode_sucmsg","none");
+		$$D("country_fld").className="sbx"; blockNone("p_country_errmsg","none");		
+        $('#bypost').removeClass("dwnl_tabact");
+        $('#bydownld').addClass("dwnl_tabact");
+        $$D("down_prospectus").value = "true";
+        $$D("requ_prospectus").value = "false";
+		blockNone("getprostext","none");
+		blockNone("getprosbtn","none");
+		blockNone("downloadtext","block");
+		blockNone("downloadbtn","block");
+    }
+	// document.getElementById("stdForm").style.opacity = "0";
+	// document.getElementById("stdForm").style.opacity = "1";
+	$("#stdForm").hide();
+    $("#stdForm").fadeIn(300);
+ 
+ };
+ 
+ //*********************************************************************// PGS_20160726
+ 
+   function GAIPSectionTracking(section_name)
+  {
+    var url='/pgs/pgs_content.ga_ip_section_tracking_prc?p_section_name='+encodeURIComponent(section_name);
+    var ajax=new sack();
+    ajax.requestFile=url;
+    ajax.onCompletion=function(){GAIPSectionComplete(ajax)}
+    ajax.runAJAX();
+  }
+  function GAIPSectionComplete(ajax)
+  {
+   var resp = ajax.response;
+  if(resp != null && resp!=' ')
+     {
+	 eval(resp);
+     }	 
+  }
+ //***********************************************************************// PGS_20170516
+ 
+ function containsSpecialCharacter(p_msg){
+	if(p_msg != null){
+		var inputText = p_msg;
+		for(var i= 0; i< vulnerableKeywords.length; i++){  
+			var inputIndex = (inputText.toLowerCase()).indexOf(vulnerableKeywords[i]);
+			if(inputIndex != -1) {
+				return vulnerableKeywords[i];
+			}
+		}
+		for(var i= 0; i< htmlTags.length; i++){             
+			var inputIndex1 = (inputText.toLowerCase()).indexOf(htmlTags[i]);
+			if(inputIndex1 != -1) {
+				return htmlTags[i];
+			}
+		}
+	}
+	return "";
+}
+//
+function searchResultSponsoredViewLogging(collegeId,p_type,deviceWidth,orderItemId,orderItemIdSponsored,browseCatCode){
+	var ajax=new sack();
+     var url = '/pgs/pgs_interactive.web_click_db_log?z='+collegeId+"&p_type="+p_type+"&p_screen_width="+deviceWidth+"&p_order_item_id="+orderItemId+"&p_source_order_item_id="+orderItemIdSponsored+"&p_spons_category_code="+browseCatCode;
+	 ajax.requestFile = url;
+	 ajax.onCompletion = function(){ responseDataSponsored(ajax); };	
+	 ajax.runAJAX();
+}
+
+function responseDataSponsored(ajax){
+   return false;
+}	
+
+		
+
+
+
+
+
+						

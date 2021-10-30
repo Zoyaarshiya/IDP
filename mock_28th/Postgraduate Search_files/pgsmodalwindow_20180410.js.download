@@ -1,0 +1,513 @@
+/*!
+ * modalwindow  v1.0 - 03/09/2012
+ */
+// Script: modalwindow.js: 
+// Project Home - http://www.postgraduatesearch.com/
+// 
+// About: modalwindow.js
+// This Js file contains object to open the lightbox, and loads the page inside the lightbox with a ajax request
+
+//var pgs_scheme = ("https:" == document.location.protocol) ? "https://" : "http://";
+//var pgs_domain = pgs_scheme + document.domain;
+
+function pageWidth() {
+    return window.innerWidth != null ? window.innerWidth : document.documentElement && document.documentElement.clientWidth ?
+        document.documentElement.clientWidth : document.body != null ? document.body.clientWidth : null;
+}
+function pageHeight() {
+    return window.innerHeight != null ? window.innerHeight : document.documentElement && document.documentElement.clientHeight ?
+        document.documentElement.clientHeight : document.body != null ? document.body.clientHeight : null;
+}
+function posLeft() {
+    return typeof window.pageXOffset != 'undefined' ? window.pageXOffset : document.documentElement && document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft ? document.body.scrollLeft : 0;
+}
+function posTop() {
+    return typeof window.pageYOffset != 'undefined' ? window.pageYOffset : document.documentElement && document.documentElement
+        .scrollTop ? document.documentElement.scrollTop : document.body.scrollTop ? document.body.scrollTop : 0;
+}
+function scrollFix() {
+    var obol = $$D('ol');
+    obol.style.top = posTop() + 'px';
+    obol.style.left = posLeft() + 'px'
+}
+function sizeFix() {
+    var obol = $$D('ol');
+    obol.style.width = pageWidth() + 'px';
+}
+
+function kp(e) {
+    ky = e ? e.which : event.keyCode;
+    if (ky == 88 || ky == 120) hm();
+    return false
+}
+function inf(h) {
+    tag = document.getElementsByTagName('select');
+    for (i = tag.length - 1; i >= 0; i--) {
+        if (tag[i].id != 'yearOfUniEntry') {
+            tag[i].style.visibility = h;
+        }
+    }
+    tag = document.getElementsByTagName('iframe');
+    for (i = tag.length - 1; i >= 0; i--) tag[i].style.visibility = h;
+    tag = document.getElementsByTagName('object');
+    for (i = tag.length - 1; i >= 0; i--) tag[i].style.visibility = h;
+}
+function sm(obl, wd, ht, form_name) {
+    var h = 'hidden';
+    var b = 'block';
+    var p = 'px';
+    var obol = $$D('ol');	
+	var obbxd = $$D('mbd');
+	obbxd.innerHTML = $$D(obl).innerHTML;
+	
+    obol.style.height = pageHeight() + p;
+    obol.style.width = pageWidth() + p;
+    obol.style.top = posTop() + p;
+    obol.style.left = posLeft() + p;
+    obol.style.display = b;
+    var tp = posTop() + ((pageHeight() - ht) / 2) - 12;
+    var lt = posLeft() + ((pageWidth() - wd) / 2) - 12;
+    var obbx = $$D('mbox');
+    if (form_name == 'video-light-box') {
+        obbx.className = "mbox";
+        obbx.setAttribute('class', 'mbox');
+    } else {
+        obbx.className = "mbox1";
+        obbx.setAttribute('class', 'mbox1');
+    }
+    obbx.style.top = (tp < 0 ? 0 : tp) + p;
+    obbx.style.left = (lt < 0 ? 0 : lt) + p;
+    obbx.style.width = wd + p;
+    obbx.style.height = ht + p;
+    inf(h);
+    obbx.style.display = b;
+    return false;
+}
+function hm() {
+    if ($$D("redirect_url")) {
+        var redirect_url = trimString($$D("redirect_url").value);
+        if (redirect_url != null || redirect_url != "") {
+            redirect_url = encodeURIComponent(redirect_url);
+            window.location.href = decodeURIComponent(redirect_url);
+            return;
+        }
+    }
+	if($$D("videoLightBoxContainer") && !$$D("detailarticle")){
+		jwplayer("videoLightBoxContainer").stop();	
+		jwplayer('videoLightBoxContainer').remove();
+	}
+    var v = 'visible';
+    var n = 'none';
+    $$D('ol').style.display = n;
+    $$D('mbox').style.display = n;
+    $$D("lightbx").innerHTML = ""; 
+	blockNone('newlbx','None');
+    $$D("newlbx").innerHTML = "";
+    inf(v);
+    document.onkeypress = ''
+		
+}
+
+
+function initmb() {
+    var ab = 'absolute';
+    var fx = "fixed";
+    var n = 'none';
+    var obody = document.getElementsByTagName('body')[0];
+    var frag = document.createDocumentFragment();
+    var obol = document.createElement('div');
+    obol.setAttribute('id', 'ol');
+    obol.style.display = n;
+    obol.style.position = fx;
+    obol.style.top = 0;
+    obol.style.left = 0;
+    obol.style.zIndex = 998;
+    obol.style.width = '100%';
+    frag.appendChild(obol);
+    var obbx = document.createElement('div');
+    obbx.setAttribute('id', 'mbox');
+    obbx.style.display = n;
+    obbx.style.position = ab;
+    obbx.style.zIndex = 999;
+    var obl = document.createElement('span');
+    obbx.appendChild(obl);
+    var obbxd = document.createElement('div');
+    obbxd.setAttribute('id', 'mbd');
+    obl.appendChild(obbxd);
+    frag.insertBefore(obbx, obol.nextSibling);
+    obody.insertBefore(frag, obody.firstChild);
+    window.onscroll = scrollFix;
+    window.onresize = sizeFix;
+    setTimeout(function() {
+        hideshow_ttape();	
+    }, 3000);
+}
+//window.onload = initmb1();
+
+$(document).ready(function() {
+    initmb();
+});
+
+function showPGSLightBox(form_name, pwidth, pheight, pparam) {
+   var screenWidth = jqueryWidth();
+   var url = ""
+    if (form_name == 'login') {url = "/pgs/pgs_user.pg_login_lbx?" + pparam;
+	                           if ($('head script[src="' + '/pgs-cont/scripts/jquery.realperson.min.js' + '"]').length > 0){
+                               }else{
+                                    dynamicLoadJS('/pgs-cont/scripts/jquery.realperson.min.js');
+                                  }
+								 //if ($('head script[src="' + '/pgs-cont/scripts/domain.js' + '"]').length > 0){
+                                  //}else{
+                                   // dynamicLoadJS('/pgs-cont/scripts/domain.js');
+                                  //}
+                                //if ($('head script[src="' + '/pgs-cont/scripts/emailDomain.js' + '"]').length > 0){
+                                //  }else{
+                                //    dynamicLoademailJS('/pgs-cont/scripts/emailDomain.js');
+                                //  }
+   
+	                           //dynamicLoadJS ('/pgs-cont/scripts/jquery.realperson.min.js');
+							  }
+	if (form_name == 'login-submit') {url = "/pgs/pgs_user.do_login_lbx?" + pparam;}
+    if (form_name == 'pwdreminder') {url = "/pgs/pgs_user.pg_request_password?" + pparam; 
+	                               if ($('head script[src="' + '/pgs-cont/scripts/jquery.realperson.min.js' + '"]').length > 0){
+                                  }else{
+                                    dynamicLoadJS('/pgs-cont/scripts/jquery.realperson.min.js');
+                                  }
+   }
+    if (form_name == 'pwdreminder-submit') {url = "/pgs/pgs_user.do_request_password?" + pparam;}
+    if (form_name == 'email') {url = "/pgs/pgs_interactive.pg_enquire_new?" + pparam;}
+    if (form_name == 'email-submit') {url = "/pgs/pgs_interactive.do_enquire_new?" + pparam;}
+    if (form_name == 'prospectus') {url = "/pgs/pgs_interactive.pg_request_prospectus_new?" + pparam;}
+    if (form_name == 'prospectus-submit') {url = "/pgs/pgs_interactive.do_request_prospectus_new?" + pparam;}
+    if (form_name == 'dpprospectus') {url = "/pgs/pgs_interactive.pg_download_prospectus?" + pparam;}
+    if (form_name == 'dpprospectus-submit') {url = "/pgs/pgs_interactive.do_download_prospectus?" + pparam;}
+    if (form_name == 'postenquiry-submit') {url = "/pgs/pgs_interactive.ob_checked_post_enquiry?" + pparam;}
+    if (form_name == 'contact') {url = "/pgs/pgs_interactive.pg_contact_details?" + pparam;}
+    if (form_name == 'contact-us') {url = "/pgs/pgs_interactive.pg_contact_us?";}
+    if (form_name == 'contact-us-submit') {url = "/pgs/pgs_interactive.do_contact_us?" + pparam;}
+    if (form_name == 'video-light-box') {url = "/pgs/video_light_box_prc?" + pparam;}
+    if (form_name == 'ql-submit') {url = "/pgs/pgs_interactive.do_ql_enquire_new_prc?" + pparam;}
+    if (form_name == 'po-submit') {url = "/pgs/pgs_interactive.do_post_enquiry_prc?" + pparam;}
+    if (form_name == 'comp_saveadd') {url = "/pgs/mypgs_compare_pkg.compare_lghtbx_prc?" + pparam;}
+    if (form_name == 'change_password') {url = "/pgs/pgs_user.change_password_lghtbx_prc?" + pparam;}
+    if (form_name == 'change_pswd_success') {url = "/pgs/pgs_user.success_lghtbx_prc?" + pparam;}
+    if (form_name == 'bskt_empty_err') {url = "/pgs/mypgs_compare_pkg.basket_empty_lghtbx_prc?" + pparam;}
+    if (form_name == 'basket_delete') {url = "/pgs/mypgs_compare_pkg.delete_basket_lghtbx_prc?" + pparam;}
+    if (form_name == 'too_many_comp') {url = "/pgs/mypgs_compare_pkg.error_lghtbx_prc?" + pparam;}
+    if (form_name == 'google_map_click') {url = "/pgs/google_lghtbx_prc?" + pparam;}
+    if (form_name == 'calendar') {url = "/pgs/pgs_open_days_pkg.openday_calendar_lightbox_prc?" + pparam;}
+	if (form_name == 'bur_apply_login') {url = "/pgs/pgs_bursary_winners_pkg.bursary_apply_lightbox_prc?"+ pparam;}
+	if (form_name == 'bur_success') {url = "/pgs/pgs_user.success_bursary_lghtbx_prc?"+ pparam;}
+	if (form_name == 'webclick_compare') {url = "/pgs/mypgs_compare_pkg.webclick_compare_lbx_prc?"+ pparam;}
+	if (form_name == 'redirection_lightbox') {url = "/pgs/redirection_lightbox_prc?"+ pparam;}	
+	if (form_name == 'signup') {url = "/pgs/pgs_user.signup_lbx?"+ pparam;}
+	if (form_name == 'download_success') {url = "/pgs/download_success_lbx?"+ pparam;}
+	if (form_name == 'my_profile_alert') {url = "/pgs/pgs_user_profile_pkg.get_myprofile_alert_prc?" + pparam;}	
+    if ( (screenWidth < 993) && (form_name != 'redirection_lightbox') && (form_name != 'my_profile_alert') && (form_name != 'download_success')  && url.indexOf('p_from_page=CD') == -1 && url.indexOf('p_from_page=IP') == -1 ) {	   
+       createform(url);
+       return;       
+    } else {	
+        sm('newvenueform', pwidth, pheight, form_name);
+		if ($$D("newlbx").style.display="block"){blockNone('newlbx','none');$$D("newlbx").innerHTML="";}
+        $$D("ajax-div").style.display = "block";
+        $$D("lightbx").style.display = "block";	        
+        var ajax = new sack();
+        ajax.requestFile = url; // Specifying which file to get
+        ajax.onCompletion = function(){displayFormData(ajax, form_name);}; // Specify function that will be executed after file has been found
+        ajax.runAJAX();
+		if(form_name == 'redirection_lightbox'){  $(window).trigger('resize'); }
+    }
+}
+
+function basketEmptyCheck(bskt_cnt, pparam, basktid) {
+    if (bskt_cnt == 0) {
+        showPGSLightBox('bskt_empty_err', '665', '520', '');
+    } else {
+        if ($$D("pn_" + basktid) != null) {
+            var personalnote = $$D("pn_" + basktid).value;
+            if (personalnote == 'Enter any comments here') {
+                personalnote = '';
+            }
+        } 
+        var params = pparam + '&p_personal_note=' + encodeURIComponent(personalnote);
+        showPGSLightBox('comp_saveadd', '665', '520', params);
+    }
+}
+function displayFormData(ajax, form_name) {
+    var forwardurl = "";	
+	/*if ((ajax.response == 'success') && (form_name == 'login-submit') ){
+	window.location.href = "www.postgraduatesearch.com/pgs/mypgs_compare_pkg.compare_course_prc"
+	return false;
+	} else {*/
+    $$D("lightbx").innerHTML = ajax.response;
+    $$D("ajax-div").style.display = "none";	
+    $$D("lightbx").style.display = "block";
+    $$D("newvenueform").style.display = "block";
+	//}
+	if (form_name == 'webclick_compare') {
+		$$D("mbox").className="mbox1 cm_mbox";
+	}
+	if (form_name == 'redirection_lightbox') {
+		$$D("mbox").className="cm_mbox mbox1";
+	}	
+	if(form_name == 'redirection_lightbox'){  $(window).trigger('resize'); }
+	if (form_name == 'signup') {
+		$$D("mbox").className="mbox1 sgn_mbox";
+	}
+    if (form_name == 'my_profile_alert') {
+	
+		$$D("mbox").className="mbox1 cm_mbox";
+		return;
+	}
+    if ($$D("videoLightBoxScriptbitly")) {
+        eval($$D("videoLightBoxScriptbitly").innerHTML);
+    }
+    if ($$D("qlAutofilldropdown")) {
+        // alert("coming here");
+        eval($$D("qlAutofilldropdown").innerHTML);
+    }
+    //alert(form_name);
+    if (form_name == 'google_map_click') {
+        if ($$D("GoogleLightBoxScript")) {
+            eval($$D("GoogleLightBoxScript").innerHTML);
+        }
+    }
+    if (form_name == 'video-light-box') {
+        setTimeout(function() {
+            if ($$D("videoLightBoxScript")) {
+                eval($$D("videoLightBoxScript").innerHTML);
+            }
+        }, 2000);
+    }
+	if (form_name == 'pwdreminder'){
+		setTimeout(function() {
+	if ($$D("captcha_id")) {
+            eval($$D("captcha_id").innerHTML);
+        }
+        }, 100);
+
+	}	
+    if (form_name == 'email-submit' || form_name == 'prospectus-submit' || form_name == 'ql-submit' || form_name == 'po-submit' ||form_name == 'email'|| form_name == 'pwdreminder-submit'|| form_name == 'prospectus') {
+        var elements = $("script[id^='iterate']");
+        if (elements.length > 0) {
+            for (var i = 1; i <= elements.length; i++) {
+                //alert($$D('iterate'+i).innerHTML);
+                eval($$D('iterate' + i).innerHTML);
+            }
+        }
+    }
+    if (form_name == 'comp_saveadd' && ajax.response.indexOf("x") == 1) {
+        forwardurl = '/pgs/mypgs_compare_pkg.compare_course_prc?' + ajax.response;
+        location.href = forwardurl;
+    }
+	 if (form_name != 'video-light-box') {
+											if($$D('domnScptId')){ 		
+										   eval($$D("domnScptId").innerHTML);   
+										   }		 
+	 }
+
+
+}
+	 
+function placeIt() {
+    if (isIE && !document.all) {
+        document.getElementById("mbox").style.top = window.pageYOffset + (window.innerHeight - (window.innerHeight - verticalGap)) + "px";		
+    }
+    if (document.all) {
+        document.all["mbox"].style.top = document.documentElement.scrollTop + (document.documentElement.clientHeight - (document.documentElement.clientHeight - verticalGap)) + "px";		
+    }
+    window.setTimeout("placeIt()", 50);
+}
+function placeIt() {
+    if (isIE && !document.all) {
+        document.getElementById("ol").style.top = window.pageYOffset + (window.innerHeight - (window.innerHeight - verticalGap)) + "px";
+    }
+    if (document.all) {
+        document.all["ol"].style.top = document.documentElement.scrollTop + (document.documentElement.clientHeight - (document.documentElement.clientHeight - verticalGap)) + "px";
+    }
+    window.setTimeout("placeIt()", 50);
+}
+function createform(params) {  	
+    var vars = [],
+        hash;		
+    var hashes = params.replace(/(\r\n|\n|\r)/gm, "").slice(params.indexOf('?') + 1).split('&');
+    var action1 = params.substr(0, params.indexOf('?'));
+    var input1,input2,input3;
+	var decode_comp ;
+    var form = document.createElement('form');
+    form.setAttribute('action', action1);
+    form.setAttribute('method', 'POST');
+    form.setAttribute('id', 'dynamicform');
+	
+    for (var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        input1 = document.createElement('input');
+        input1.setAttribute('type', 'hidden');
+		if (hash[0] == "p_msg"|| hash[0] =="p_attribute_value" || hash[0] =="p_addr1" || hash[0] =="p_addr2" || hash[0] =="p_town" || hash[0] =="p_townc" )
+		{  
+		  decode_comp = decodeURIComponent(hash[1]);
+		  input1.setAttribute("value", decode_comp);
+		}else{
+		input1.setAttribute("value", hash[1]);		
+		}
+        input1.setAttribute('name', hash[0]);
+        form.appendChild(input1);
+    }
+   var screenWidth = jqueryWidth();
+    var redirect_url;
+    if ($$D("redirect_url")) {
+        redirect_url = trimString($$D("redirect_url").value);
+    }
+    if (redirect_url == null || redirect_url == '') {
+        redirect_url = document.URL;
+    }
+	redirect_url = redirect_url.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+	input2 = document.createElement('input');
+    input2.setAttribute('type', 'hidden');
+	input2.setAttribute("value", redirect_url );
+	input2.setAttribute('name',"p_url");
+    form.appendChild(input2);
+    input3 = document.createElement('input');
+    input3.setAttribute('type', 'hidden');
+	input3.setAttribute("value", "new_pge" );
+	input3.setAttribute('name',"p_from_page");
+    form.appendChild(input3);
+    var submit = document.createElement('input');
+    submit.setAttribute('type', 'submit');
+    submit.setAttribute("value", "Save");
+    submit.setAttribute('id', 'savebutton');
+    form.appendChild(submit);
+    $("body").append(form);
+    document.forms["dynamicform"].submit();
+	$("#savebutton").css("display", "none");
+}
+
+jQuery.fn.preventDoubleSubmission = function() {
+  $(this).on('submit',function(e){
+    var $form = $(this);
+    if ($form.data('submitted') === true) { e.preventDefault();} // Previously submitted - don't submit again
+	else { $form.data('submitted', true); }// Mark it so that the next submit can be ignored
+  });
+  // Keep chainability
+  return this;
+};
+
+$("#dynamicform").preventDoubleSubmission();
+function newPgsLbx(form_name, pparam){
+ var screenWidth = jqueryWidth();
+ if (form_name == 'email') {url = "/pgs/pgs_interactive.pg_enquiry_new?" + pparam;}
+ if (form_name == 'signin') {url = "/pgs/pgs_user.pg_signin_lbx?" + pparam;}
+ if (form_name == 'signup'){url = "/pgs/pgs_user.signup_frm_lbx_prc?" + pparam;}
+ if (form_name == 'prospectus'){url = "/pgs/pgs_interactive.pg_request_prospectus_prc?" + pparam;}
+ if (form_name == 'email-submit'){url = "/pgs/pgs_interactive.do_enquire_new?" + pparam;}
+
+ if (screenWidth < 993 && form_name !='email-submit'){createformnew(url);return;} 
+ else {	blockNone('ol','block'); var wish=new sack();
+		wish.requestFile = url; 
+		wish.onCompletion = function(){ 
+								$$D("newlbx").innerHTML=wish.response;
+								blockNone('newlbx','block');
+								$$D("lbxInner").style.top = (window.pageYOffset + 40) + "px";
+								eval($$D('txtbxeffect').innerHTML);
+								eval($$D('txthidshow').innerHTML);
+								if($$D('domnScptId')){ 		
+  eval($("#domnScptId").html());   
+   }
+								$('.adiptxt').on("invalid", function(e) {
+									e.preventDefault();
+								});
+								if(form_name=='signin' || form_name=='signup' || form_name == 'prospectus'){     
+									 $('.nw_frm .adiptxt').each(function(){
+										if($(this).val() !=""){ $(this).next('label').addClass("top_lb"); } 
+										else { $(this).next('label').removeClass("top_lb"); }
+                                       });
+								
+								} 
+						    
+	//if($$D('domnScptId')){ 		
+  // eval($$D("domnScptId").innerHTML);   
+  // }
+							
+							}; 
+		wish.runAJAX();		
+	}
+	
+}
+function createformnew(params) {
+    var vars = [],
+        hash;		
+    var hashes = params.replace(/(\r\n|\n|\r)/gm, "").slice(params.indexOf('?') + 1).split('&');
+    var action1 = params.substr(0, params.indexOf('?'));
+    var input1,input2,input3;
+	var decode_comp ;
+    var form = document.createElement('form');
+    form.setAttribute('action', action1);
+    form.setAttribute('method', 'POST');
+    form.setAttribute('id', 'dynamicform');
+	
+    for (var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        input1 = document.createElement('input');
+        input1.setAttribute('type', 'hidden');
+		if (hash[0] == "p_msg"|| hash[0] =="p_attribute_value" || hash[0] =="p_addr1" || hash[0] =="p_addr2" || hash[0] =="p_town" || hash[0] =="p_townc" )
+		{  
+		  decode_comp = decodeURIComponent(hash[1]);
+		  input1.setAttribute("value", decode_comp);
+		}else{
+		input1.setAttribute("value", hash[1]);		
+		}
+        input1.setAttribute('name', hash[0]);
+        form.appendChild(input1);
+    }
+   var screenWidth = jqueryWidth();
+    var redirect_url;
+    if ($$D("redirect_url")) {
+        redirect_url = trimString($$D("redirect_url").value);
+    }
+    if (redirect_url == null || redirect_url == '') {
+        redirect_url = document.URL;
+    }
+	redirect_url = redirect_url.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+	input2 = document.createElement('input');
+    input2.setAttribute('type', 'hidden');
+	input2.setAttribute("value", redirect_url );
+	input2.setAttribute('name',"p_url");
+    form.appendChild(input2);
+    input3 = document.createElement('input');
+    input3.setAttribute('type', 'hidden');
+	input3.setAttribute("value", "new_pge" );
+	input3.setAttribute('name',"p_from_page");
+    form.appendChild(input3);
+    var submit = document.createElement('input');
+    submit.setAttribute('type', 'submit');
+    submit.setAttribute("value", "Save");
+    submit.setAttribute('id', 'savebutton');
+    form.appendChild(submit);
+    $("body").append(form);
+    document.forms["dynamicform"].submit();
+	$("#savebutton").css("display", "none");	
+	
+}
+
+function dynamicLoadJS(src){ //Added for pgs_20170516 by soundariya to load JS file dynamically
+  var script = document.createElement("script");
+  script.type = "text/javascript"; 
+  script.src = src;
+  if (typeof script != "undefined"){
+    document.getElementsByTagName("head")[0].appendChild(script);
+  }
+}
+
+function dynamicLoademailJS(src){ //Added for pgs_20170516 by soundariya to load JS file dynamically
+  var script = document.createElement("script");
+  script.type = "text/javascript"; 
+  script.id = "domnScptId";
+  script.src = src;
+  if (typeof script != "undefined"){
+    document.getElementsByTagName("head")[0].appendChild(script);
+  }
+}
+  function rmcls(){
+$("#stg1b").removeClass('dis_clk');
+}
+               
