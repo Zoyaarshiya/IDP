@@ -26,8 +26,17 @@ export class FkheaderComponent implements OnInit {
   }
   login(name:any,pass:any)
   {
-    localStorage.setItem("Username",name)
-    localStorage.setItem("Password",pass)
-    console.log("Hi" +" "+name+" "+"your password is"+" "+pass);
+    var a=localStorage.getItem("Username")
+    var b=localStorage.getItem("Password")
+    var c=localStorage.getItem("Mobile")
+    if(a==name&&b==pass)
+    {
+     this.router.navigateByUrl("banking")
+    }
+    else
+    {
+      alert("Invalid user")
+    }
+    // console.log("Hi" +" "+name+" "+"your password is"+" "+pass);
   }
 }

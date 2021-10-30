@@ -1,0 +1,29 @@
+ <h1>Welcome to SBI Bank</h1><br>
+<div class="main">
+    <form>
+<label>Principle Amount:</label>
+<input type="number" #p><br><br>
+<label>Term:</label>
+<input type="number" #t><br><br>
+<label>ROI:</label>
+<input type="number" value={{myroi}} #roi>   <br><br>
+<label>Choose a Loan</label>
+  <select (change)="select($event)">
+    <option value="3">Vehicle Loan</option>
+    <option value="5">Personal Loan</option>
+    <option value="7">Education Loan</option>
+    <option value="9">Home Loan</option>
+  </select>    <br><br><br>
+<button type="reset" (click)="calculate(p.value,t.value,roi.value)">Calculate</button>
+
+</form>
+</div> 
+
+
+
+ 
+        
+ 
+
+
+  

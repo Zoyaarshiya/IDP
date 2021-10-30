@@ -2,17 +2,22 @@
     <h1>Sign Up</h1><br>
     <div class="container">
       <label><b>Name:</b></label>
-      <input type="text" required><br><br>
-  
+      <input [style.border-color]="color" type="text" #myname><br>
+      <span [style.color]="color" [style.margin-left]="margin">{{warn}}</span>
+      <br><br>
       <label><b>Password:</b></label>
-      <input><br><br>
-  
-      <label><b>Mobile:</b></label>
-      <input><br><br><br>
-
-      <button type="button" style="margin-left: 140px;">
+      <input [style.border-color]="color" type="text" #mypass><br>
+      <span [style.color]="color" [style.margin-left]="margin">{{warn}}</span>
+      <br><br>
+     <label><b>Mobile:</b></label>
+      <input [style.border-color]="color" type="text" #mymob><br>
+      <span [style.color]="color" [style.margin-left]="margin">{{warn}}</span>
+      <br><br><br>
+      
+      <button type="button"  style="margin-left: 140px;" (click)="register(myname.value,mypass.value,mymob.value)">
           Register
       </button>
+     
       <br><br>
     </div>
   </form> 

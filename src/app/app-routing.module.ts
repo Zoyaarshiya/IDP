@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppliancesComponent } from './appliances/appliances.component';
+import { BankingComponent } from './banking/banking.component';
 import { ElectronicsComponent } from './electronics/electronics.component';
 import { ErrorComponent } from './error/error.component';
 
@@ -75,6 +76,10 @@ const routes: Routes = [
   {
     path:'registration',
   component:RegistrationComponent
+  },
+  {
+    path:'banking',
+    component:BankingComponent
   },
   {
     path:'**',

@@ -26,6 +26,7 @@ import { Comp3Component } from './comp3/comp3.component';
 import { SellonComponent } from './more/sellon/sellon.component';
 import { CustomerComponent } from './more/customer/customer.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { BankingComponent } from './banking/banking.component';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { RegistrationComponent } from './registration/registration.component';
                    SellonComponent,
                    CustomerComponent,
                    RegistrationComponent,
+                   BankingComponent,
          
    
   ],

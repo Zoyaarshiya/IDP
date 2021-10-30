@@ -13,10 +13,14 @@ export class Comp1Component implements OnInit {
   ngOnInit(): void {
   }
   
-  abc(myname:any)
+  // abc(myname:any)
+  // {
+  //   console.log(myname)
+  //   this.xxx.ser(myname)
+  // }
+  abc()
   {
-    console.log(myname)
-    this.xxx.ser(myname)
+    this.xxx.ser()
   }
 
 }

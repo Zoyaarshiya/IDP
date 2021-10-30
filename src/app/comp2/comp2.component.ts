@@ -12,9 +12,13 @@ export class Comp2Component implements OnInit {
 
   ngOnInit(): void {
   }
-  servename=''
+  // servename=''
+  // abc()
+  // {
+  //   this.servename=this.yyy.name;
+  // }
   abc()
   {
-    this.servename=this.yyy.name;
+    this.yyy.ser();
   }
 }
