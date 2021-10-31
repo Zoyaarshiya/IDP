@@ -12,6 +12,7 @@ export class FkheaderComponent implements OnInit {
   
   ngOnInit(): void {
   }
+ 
   notifications()
   {
     this.router.navigateByUrl('more/notifications')

@@ -12,15 +12,22 @@ export class Comp1Component implements OnInit {
 
   ngOnInit(): void {
   }
-  
+  mydata='';
   // abc(myname:any)
   // {
   //   console.log(myname)
   //   this.xxx.ser(myname)
   // }
-  abc()
+  // abc()
+  // {
+  //   this.xxx.ser()
+  // }
+
+  abc(name:any)
   {
-    this.xxx.ser()
+    //console.log(name)
+    this.xxx.ser(name)
+    this.xxx.login();
   }
 
 }

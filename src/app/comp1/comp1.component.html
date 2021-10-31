@@ -1,4 +1,7 @@
 <!-- <input type="text" #myname> -->
 <!-- <button type="sumit" (click)="abc(myname.value)">Click</button> -->
-
-<button type="sumit" (click)="abc()">Click</button>
+<input type="text" #myname >
+<button type="sumit" (click)="abc(myname.value)">Click</button>
+<br>
+<input [(ngModel)]="mydata"><br>
+{{mydata}}

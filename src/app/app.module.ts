@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
+import { FormsModule } from '@angular/forms';
 import { FkheaderComponent } from './fkheader/fkheader.component';
 import { ImgcomComponent } from './imgcom/imgcom.component';
 import { MobilesComponent } from './mobiles/mobiles.component';
@@ -61,7 +61,8 @@ import { BankingComponent } from './banking/banking.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

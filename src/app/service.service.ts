@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ServiceService {
+  
 // name=''
 //   constructor() { }
 //   ser(myname:any)
@@ -11,8 +12,17 @@ export class ServiceService {
 //     this.name=myname
 //   }
 constructor(){}
-ser()
+myname='';
+ser(name:any)
 {
   console.log("Hi i am from service")
+  console.log(name);
+ this.myname=name;
+
+ 
+}
+login()
+{
+  alert("logged in")
 }
 }

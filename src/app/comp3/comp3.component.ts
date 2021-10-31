@@ -12,5 +12,11 @@ export class Comp3Component implements OnInit {
 
   ngOnInit(): void {
   }
-  
+  name='';
+  abc()
+  {
+    this.name=this.zzz.myname;
+    console.log(this.name)
+    this.zzz.login();
+  }
 }

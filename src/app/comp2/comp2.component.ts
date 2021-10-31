@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { ServiceService } from '../service.service';
 
 @Component({
@@ -17,8 +18,15 @@ export class Comp2Component implements OnInit {
   // {
   //   this.servename=this.yyy.name;
   // }
-  abc()
+  // abc()
+  // {
+  //   this.yyy.ser();
+  // }
+  name:any;
+  comp2()
   {
-    this.yyy.ser();
+    this.name=this.yyy.myname;
+    console.log(this.name)
+    this.yyy.login();
   }
 }
